@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import React from 'react'
 import signUpImage from "@/public/images/signUpImage.jpg"
 import Link from 'next/link';
+import z from 'zod';
 const page = () => {
     return (
         <>
