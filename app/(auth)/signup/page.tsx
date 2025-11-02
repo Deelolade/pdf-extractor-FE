@@ -1,8 +1,15 @@
+"use client"
 import Image from 'next/image';
-import React from 'react'
 import signUpImage from "@/public/images/signUpImage.jpg"
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpFormType, signUpSchema } from '@/app/schemas/authSchema';
 const page = () => {
+
+    const { register, handleSubmit, formState: {errors}} = useForm<signUpFormType>({
+        resolver: zodResolver(signUpSchema)
+    })
     return (
         <>
             <section className="flex justify-center items-center h-screen">
