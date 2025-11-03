@@ -17,10 +17,10 @@ const page = () => {
         <>
             <section className="flex justify-center items-center h-screen">
                 <div className=" flex justify-center items-center h-screen w-screen ">
-                    <div className="w-1/2 flex justify-center items-center">
-                        <form className='w-[400px] p-8 shadow-lg rounded-lg' onClick={handleSubmit(onSubmit)}>
+                    <div className="w-full lg:w-1/2 flex justify-center items-center">
+                        <form className='w-[400px] p-8 shadow-sm lg:shadow-lg rounded-lg' onClick={handleSubmit(onSubmit)}>
                             <div className=" text-center">
-                                <h1 className='text-2xl font-semibold mb-3'>Sign Up</h1>
+                                <h1 className='text-xl md:text-2xl font-semibold mb-3'>Sign Up</h1>
                                 <p className='text-sm text-gray-500 font-semibold'>Sign up by entering your name, email address, and a secure password.</p>
                             </div>
                             <div className="flex flex-col gap-5 mt-6">
@@ -53,7 +53,7 @@ const page = () => {
                             </div>
                         </form>
                     </div>
-                <div className="w-1/2 bg-green-200 h-screen flex justify-center items-center">
+                <div className="hidden lg:flex md:w-1/2 h-screen justify-center items-center">
                     <Image src={signUpImage} loading='eager' alt='PDF_EXTARCTOR_IMAGE' className='w-full h-full object-cover' />
                 </div>
                 </div>
