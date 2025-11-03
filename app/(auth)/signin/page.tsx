@@ -29,10 +29,12 @@ const page = () => {
                                 <div className="flex flex-col">
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'>Email Address</label>
                                     <input type="email" {...register("email")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="e.g. johndoe@example.com" />
+                                    {errors.email && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.email.message}</p>}
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'>Password</label>
                                     <input type="password" {...register("password")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="Enter your password" />
+                                    {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
                                     <button className='bg-black text-white text-sm w-full py-2 rounded-lg font-semibold'>Sign In</button>
