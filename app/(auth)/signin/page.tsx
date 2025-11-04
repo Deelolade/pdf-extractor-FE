@@ -5,16 +5,16 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInFormType, signInSchema } from '@/app/schemas/authSchema';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { API_URL } from '@/app/config/env';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-// import { useRouter } from 'next/router';
-
+import { useState } from 'react';
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const page = () => {
     const router = useRouter();
-
+    const [passwordType, setPasswordType] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
@@ -26,7 +26,9 @@ const page = () => {
             router.push('/dashboard')
         }
         catch(error){
+            const err = error as AxiosError<{ message: string}>
             console.log('error:', error);
+            toast.error(err?.response?.data.message || "Something went wrong");
         }
     }
     return (
@@ -47,7 +49,10 @@ const page = () => {
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'>Password</label>
-                                    <input type="password" {...register("password")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="Enter your password" />
+                                    <div className="flex items-center border border-gray-300 px-3 py-1 rounded-md">
+                                        <input type={passwordType ? "text" : "password"} {...register("password")} className=' w-full font-semibold outline-0' placeholder="Enter your password" />
+                                    <i onClick={()=> setPasswordType((prev)=> !prev)}>{passwordType ? <LuEye/> : <LuEyeOff/>}</i>
+                                    </div>
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
@@ -60,7 +65,7 @@ const page = () => {
                         </form>
                     </div>
                     <div className="hidden lg:flex md:w-1/2  h-screen justify-center items-center">
-                        <Image src={signUpImage} alt='PDF_EXTARCTOR_IMAGE' className='w-full h-full object-cover' />
+                        <Image src={signUpImage} loading='eager' alt='PDF_EXTARCTOR_IMAGE' className='w-full h-full object-cover' />
                     </div>
                 </div>
             </section>
