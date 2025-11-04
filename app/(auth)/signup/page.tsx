@@ -7,17 +7,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpFormType, signUpSchema } from '@/app/schemas/authSchema';
 import axios from 'axios';
 import { API_URL } from '@/app/config/env';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 const page = () => {
+    const router = useRouter();
 
-    const { register, handleSubmit, formState: {errors}} = useForm<signUpFormType>({
+    const { register, handleSubmit, formState: { errors } } = useForm<signUpFormType>({
         resolver: zodResolver(signUpSchema)
     })
-     const onSubmit = async (data: signUpFormType) => {
-        // console.log(data);
-        try{
-            const res= await axios.post(`${API_URL}/auth/register`, data);
-            console.log(res);        }
-        catch(error){
+    const onSubmit = async (data: signUpFormType) => {
+        try {
+            const res = await axios.post(`${API_URL}/auth/register`, data);
+            console.log(res)
+            toast.success(res.data.message || "User created successfully");
+            router.push('/dashboard')
+        }
+        catch (error) {
             console.log('error:', error);
         }
     }
@@ -48,7 +53,7 @@ const page = () => {
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="flex flex-col">
-                                    <label htmlFor=""  className='text-sm mb-2 font-semibold'> Confirm Password</label>
+                                    <label htmlFor="" className='text-sm mb-2 font-semibold'> Confirm Password</label>
                                     <input type="password" {...register("confirmPassword")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="Re-enter your password" />
                                     {errors.confirmPassword && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.confirmPassword.message}</p>}
                                 </div>
@@ -61,9 +66,9 @@ const page = () => {
                             </div>
                         </form>
                     </div>
-                <div className="hidden lg:flex md:w-1/2 h-screen justify-center items-center">
-                    <Image src={signUpImage} loading='eager' alt='PDF_EXTARCTOR_IMAGE' className='w-full h-full object-cover' />
-                </div>
+                    <div className="hidden lg:flex md:w-1/2 h-screen justify-center items-center">
+                        <Image src={signUpImage} loading='eager' alt='PDF_EXTARCTOR_IMAGE' className='w-full h-full object-cover' />
+                    </div>
                 </div>
             </section>
         </>

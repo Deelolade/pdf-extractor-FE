@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import Image from 'next/image';
 import signUpImage from "@/public/images/signUpImage.jpg"
 import Link from 'next/link';
@@ -7,18 +7,23 @@ import { signInFormType, signInSchema } from '@/app/schemas/authSchema';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { API_URL } from '@/app/config/env';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/router';
 
 
 const page = () => {
+    const router = useRouter();
 
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
     const onSubmit = async (data: signInFormType) => {
-        // console.log(data);
+        // coxnsole.log(data);
         try{
             const res = await axios.post(`${API_URL}/auth/signin`, data);
-            console.log(res)
+            toast.success(res.data.message ||"Signed in successfully");
+            router.push('/dashboard')
         }
         catch(error){
             console.log('error:', error);
