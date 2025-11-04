@@ -5,13 +5,21 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpFormType, signUpSchema } from '@/app/schemas/authSchema';
+import axios from 'axios';
+import { API_URL } from '@/app/config/env';
 const page = () => {
 
     const { register, handleSubmit, formState: {errors}} = useForm<signUpFormType>({
         resolver: zodResolver(signUpSchema)
     })
-    const onSubmit = (data:signUpFormType)=>{
-        console.log('data:', data)
+     const onSubmit = async (data: signUpFormType) => {
+        // console.log(data);
+        try{
+            const res= await axios.post(`${API_URL}/auth/register`, data);
+            console.log(res);        }
+        catch(error){
+            console.log('error:', error);
+        }
     }
     return (
         <>

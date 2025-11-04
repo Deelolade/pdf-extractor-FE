@@ -2,18 +2,27 @@
 import Image from 'next/image';
 import signUpImage from "@/public/images/signUpImage.jpg"
 import Link from 'next/link';
-import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInFormType, signInSchema } from '@/app/schemas/authSchema';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { API_URL } from '@/app/config/env';
+
 
 const page = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
-    const onSubmit = (data: signInFormType) => {
-        console.log(data);
+    const onSubmit = async (data: signInFormType) => {
+        // console.log(data);
+        try{
+            const res = await axios.post(`${API_URL}/auth/signin`, data);
+            console.log(res)
+        }
+        catch(error){
+            console.log('error:', error);
+        }
     }
     return (
         <>
