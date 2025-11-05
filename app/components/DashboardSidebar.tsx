@@ -6,14 +6,14 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { LuClipboardList } from 'react-icons/lu'
 import { PiSquaresFourBold } from 'react-icons/pi'
+import { useUser } from '../store/userStore'
 
 const Sidebar = () => {
-  let currentUser={
-    firstname:"deelolade",
-    lastname:"habeeb"
-  }
+  const { user }= useUser();
+  const currentUser = {...user}
+  console.log(user)
   return (
-    <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col  justify-between '>
+    <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col  justify-between text-[#EFF6FF] '>
       <div className="">
         <h3 className='text-sm font-semibold mt-3 text-[#EFF6FF]'>VoyagePro</h3>
         <ul className='mt-12 text-[#EFF6FF]'>
@@ -25,10 +25,10 @@ const Sidebar = () => {
       </div>
       <div className=" flex items-center justify-between ">
         <div className="flex items-center space-x-5">
-          <BiUserCircle />
+          <BiUserCircle  className='text-5xl'/>
           <div className="">
-            <h4 className='text-sm font-semibold'>{`${currentUser?.firstname} ${currentUser?.lastname}  `}</h4>
-            <p className='text-sm text-zinc-500'>Traveler</p>
+            <h4 className='text-lg font-semibold'>{`${currentUser?.name}  `}</h4>
+            <p className='text-sm text-zinc-300'>{currentUser.isPaidUser === false ? "Free User": "Paid User"}</p>
           </div>
         </div>
         <span className='scale-150'>

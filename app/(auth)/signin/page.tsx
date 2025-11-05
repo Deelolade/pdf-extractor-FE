@@ -11,8 +11,10 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useUser } from '@/app/store/userStore';
 
 const page = () => {
+    const {  setUser }= useUser();
     const router = useRouter();
     const [passwordType, setPasswordType] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
@@ -22,6 +24,8 @@ const page = () => {
         try{
             const res = await axios.post(`${API_URL}/auth/signin`, data);
             toast.success(res.data.message ||"Signed in successfully");
+            console.log(res.data.user)
+            setUser(res.data.user)
             router.push('/dashboard')
         }
         catch(error){
