@@ -9,26 +9,26 @@ import { PiSquaresFourBold } from 'react-icons/pi'
 import { useUser } from '../store/userStore'
 
 const Sidebar = () => {
-  const { user }= useUser();
-  const currentUser = {...user}
-  console.log(user)
+  const { user } = useUser();
+  const currentUser = { ...user };
+
   return (
     <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col  justify-between text-[#EFF6FF] '>
       <div className="">
-        <h3 className='text-sm font-semibold mt-3 text-[#EFF6FF]'>VoyagePro</h3>
+        <h3 className='text-sm font-semibold mt-3 text-[#EFF6FF]'>DocFeel</h3>
         <ul className='mt-12 text-[#EFF6FF]'>
           <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium '><span className='scale-150 me-3 '><PiSquaresFourBold /></span> Dashboard</Link>
-          <Link href=''  className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium'><span className='scale-150 me-3 '><FaRegCaretSquareUp /></span>Bookings</Link>
+          <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium'><span className='scale-150 me-3 '><FaRegCaretSquareUp /></span>Bookings</Link>
           <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium'><span className='scale-150 me-3'><LuClipboardList /></span>Package Listings</Link>
           {/* <li className='w-full hover:bg-slate-200 p-3 rounded-lg my-2 flex items-center text-lg font-medium'><span className='scale-150 me-3'><RiSettings4Fill/></span>Settings</li> */}
         </ul>
       </div>
       <div className=" flex items-center justify-between ">
         <div className="flex items-center space-x-5">
-          <BiUserCircle  className='text-5xl'/>
+          <BiUserCircle className='text-5xl' />
           <div className="">
             <h4 className='text-lg font-semibold'>{`${currentUser?.name}  `}</h4>
-            <p className='text-sm text-zinc-300'>{currentUser.isPaidUser === false ? "Free User": "Paid User"}</p>
+            <p className='text-sm text-zinc-300'>{currentUser.isPaidUser === false ? "Free User" : "Paid User"}</p>
           </div>
         </div>
         <span className='scale-150'>

@@ -12,26 +12,34 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useUser } from '@/app/store/userStore';
+import ButtonLoading from '@/app/components/ui/ButtonLoading';
 
 const page = () => {
     const {  setUser }= useUser();
     const router = useRouter();
+    const [ loading, setLoading]= useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
+    
     const onSubmit = async (data: signInFormType) => {
+        setLoading(true)
         try{
             const res = await axios.post(`${API_URL}/auth/signin`, data);
             toast.success(res.data.message ||"Signed in successfully");
             console.log(res.data.user)
             setUser(res.data.user)
+            setLoading(false)
             router.push('/dashboard')
         }
         catch(error){
             const err = error as AxiosError<{ message: string}>
             console.log('error:', error);
             toast.error(err?.response?.data.message || "Something went wrong");
+        } 
+        finally{
+            setLoading(false)
         }
     }
     return (
@@ -59,7 +67,7 @@ const page = () => {
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>Sign In</button>
+                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading/> :"Sign In"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold'>New here? <Link href="/signup" className='hover:underline'>Sign Up</Link></p>
                                     </div>

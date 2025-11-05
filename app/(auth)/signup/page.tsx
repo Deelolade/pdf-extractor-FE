@@ -11,7 +11,11 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
+import ButtonLoading from '@/app/components/ui/ButtonLoading';
+import { useUser } from '@/app/store/userStore';
 const page = () => {
+    const { setUser} = useUser();
+    const [loading, setLoading] = useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false)
     const router = useRouter();
 
@@ -20,14 +24,19 @@ const page = () => {
         mode: "onSubmit"
     })
     const onSubmit = async (data: signUpFormType) => {
+            setLoading(true)
         try {
             const res = await axios.post(`${API_URL}/auth/register`, data);
             toast.success(res.data.message || "User created successfully");
+            setUser(res.data.user)
             router.push('/dashboard')
         }
         catch (error) {
             const err = error as AxiosError<{ message: string }>
             toast.error(err?.response?.data.message || "Somthing went wrong")
+        } 
+        finally{
+            setLoading(false)
         }
     }
     return (
@@ -70,7 +79,7 @@ const page = () => {
                                     {errors.confirmPassword && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.confirmPassword.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>Sign Up</button>
+                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading/> : "Sign Up"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold  '>Already joined us? <Link href="/signin" className='hover:underline'>Sign in here</Link></p>
                                     </div>

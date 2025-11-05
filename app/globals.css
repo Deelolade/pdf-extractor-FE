@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@keyframes bounce-dots {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.loading-dots span {
+  animation: bounce-dots 1.4s infinite ease-in-out both;
+  display: inline-block;
+  background-color: white; /* adjust to match your text color */
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  margin: 0 2px;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
