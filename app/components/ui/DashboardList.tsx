@@ -4,9 +4,10 @@ import { API_URL } from "@/app/config/env"
 import { UploadedDocument } from "@/app/types/document"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 const DashboardList = () => {
-
+    const route = useRouter();
     const fetchAllUserDocuments = async (): Promise<UploadedDocument[]> => {
         const res = await axios.get<{ documents: UploadedDocument[] }>(`${API_URL}/document/`,
             { withCredentials: true })
@@ -18,8 +19,12 @@ const DashboardList = () => {
     const { data: documents, isLoading, isError } = useQuery<UploadedDocument[]>({
         queryKey: ['documents'],
         queryFn: fetchAllUserDocuments,
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        refetchOnMount: false,
     })
+    const handleRoute =(id: string)=>{
+        route.push(`documents/${id}`)
+    }
     return (
         <div className="mt-6">
             <h3 className="text-xl font-bold">Uploaded Documents</h3>
@@ -34,7 +39,7 @@ const DashboardList = () => {
                 <div className="h-96 overflow-y-auto">
                     {documents?.map((doc, idx) => {
                         return (
-                            <div className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={idx}>
+                            <div onClick={()=> handleRoute(doc._id)} className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={idx}>
                                 <p>{doc.fileName}</p>
                                 <p>{new Date(doc.createdAt).toLocaleDateString()}</p>
                                 <p className="text-center">{doc.wordCount}</p>
