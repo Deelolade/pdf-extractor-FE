@@ -1,15 +1,14 @@
 "use client"
-import { useParams } from 'next/navigation'
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadedDocument } from "@/app/types/document";
 import DashboardSidebar from '@/app/components/DashboardSidebar';
+import DocumentDetails from '@/app/components/DocumentDetails';
+
 const page = () => {
-    const { id } = useParams()
-    console.log(id,)
+    
     return (
-        <main>
+        <main className='bg-primary min-h-screen flex items-center  justify-between'>
             <DashboardSidebar />
-            
+            <DocumentDetails/>
+
         </main>
     )
 }

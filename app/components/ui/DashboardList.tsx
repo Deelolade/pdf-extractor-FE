@@ -5,8 +5,6 @@ import { UploadedDocument } from "@/app/types/document"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useRouter } from "next/navigation"
-import { toast } from "react-toastify"
-import ButtonLoading from "./ButtonLoading"
 import Loading from "./Loading"
 
 const DashboardList = () => {
@@ -29,7 +27,7 @@ const DashboardList = () => {
     };
     // isError && toast.error("Error occured")
     return (
-        <div className="mt-6">
+        <div className="mt-6 flex-1">
             {isLoading && <Loading />}
             <h3 className="text-xl font-bold">Uploaded Documents</h3>
             <div className="mt-4 rounded-2xl border border-gray-400 py-2">
@@ -40,7 +38,7 @@ const DashboardList = () => {
                     <p>Summary</p>
                     <p>Actions</p>
                 </div>
-                <div className="h-96 overflow-y-auto">
+                <div className=" overflow-y-auto">
                     {documents && documents?.length > 0 ? (documents?.map((doc, idx) => {
                         return (
                             <div className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={doc._id || idx}>
@@ -51,7 +49,7 @@ const DashboardList = () => {
                                     ? doc.summary.split(" ").slice(0, 20).join(" ") + (doc.summary.split(" ").length > 30 ? "..." : "")
                                     : "No summary yet"}</p>
                                 <div className="">
-                                    <button className=" text-white px-6 py-2 bg-[#1F2937]" onClick={() => handleViewDocument(doc._id)} >View</button>
+                                    <button className=" text-white px-6 py-2 bg-[#1F2937] rounded-lg" onClick={() => handleViewDocument(doc._id)} >View</button>
                                 </div>
                             </div>
                         )
