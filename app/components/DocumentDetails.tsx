@@ -9,7 +9,7 @@ import { useUser } from '../store/userStore';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import Loading from './ui/Loading';
-import { FiCheck, FiCopy, FiMessageSquare } from 'react-icons/fi';
+import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 
 const DocumentDetails = () => {
     const { user } = useUser();
@@ -17,7 +17,12 @@ const DocumentDetails = () => {
     const [loading, setLoading] = useState(false)
 
     const [copied, setCopied] = useState(false);
-
+    const openChatWithAI = (docId: string) => {
+        console.log(docId)
+    }
+    const handleDeleteDocument = async (docId: string) => {
+        console.log(docId)
+    }
     const handleCopySummary = async () => {
         if (!document?.summary) return;
         await navigator.clipboard.writeText(document.summary);
@@ -86,15 +91,8 @@ const DocumentDetails = () => {
                                 </>
                             )}
                         </button>
-                        <button
-        // onClick={() => openChatWithAI(document)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-purple-600 hover:bg-purple-700 text-white"
-    >
-        <FiMessageSquare className="w-4 h-4" />
-        Chat with AI
-    </button>
+                        
                     </div>
-
                 </div>
                 <div className="mt-12">
                     <div className=" flex flex-col mx-auto items-center ">
@@ -154,7 +152,18 @@ const DocumentDetails = () => {
                                 </div>
                             )}</div>
                         </div>
-
+                            <div className="flex flex-wrap gap-3 justify-end mt-6">
+                                <button
+                            onClick={() => openChatWithAI(document?._id || "")}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-purple-600 hover:bg-purple-700 text-white"
+                        >
+                            <FiMessageSquare className="w-4 h-4" />
+                            Chat with AI
+                        </button>
+                        <button onClick={() => handleDeleteDocument(document?._id || "")} className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 text-white">
+                            <FiTrash2 className="w-4 h-4" /> Delete
+                        </button>
+                            </div>
                     </div>
                 </div>
             </div>
