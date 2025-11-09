@@ -17,6 +17,7 @@ const DocumentDetails = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const [copied, setCopied] = useState(false);
+    const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
 
@@ -68,6 +69,7 @@ const DocumentDetails = () => {
             const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
             console.log(res.data)
             toast.success(res.data.message)
+            queryClient.invalidateQueries({queryKey: ['document', id]})
         } catch (error) {
             const err = error as AxiosError<{ message: string }>
             console.log('error:', error);

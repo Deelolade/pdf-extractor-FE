@@ -7,7 +7,6 @@ const page = () => {
     <main className='flex justify-between items-start '>
       <DashboardSidebar/>
         <DashboardList/>
-      
     </main>
   )
 }

@@ -25,9 +25,8 @@ const DashboardList = () => {
     const handleViewDocument = (id: string) => {
         route.push(`documents/${id}`);
     };
-    // isError && toast.error("Error occured")
     return (
-        <div className="mt-6 flex-1">
+        <div className="mt-6 flex-1 px-4">
             {isLoading && <Loading />}
             <h3 className="text-xl font-bold">Uploaded Documents</h3>
             <div className="mt-4 rounded-2xl border border-gray-400 py-2">
