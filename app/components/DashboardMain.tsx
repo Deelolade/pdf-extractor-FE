@@ -7,12 +7,13 @@ import { API_URL } from "../config/env";
 import { toast } from "react-toastify";
 import DashboardList from "./ui/DashboardList";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DashboardMain = () => {
     const { user } = useUser();
     const currentUser = { ...user };
     const router = useRouter();
-
+    const queryClient = useQueryClient()
 const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("hello")
     const file = e.target.files?.[0]
@@ -34,7 +35,9 @@ const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
         })
         toast.success("uploaded successfully")
         console.log(res.data)
-        // router.push(`/documents/${id}`)
+        const id = res.data.uploadId
+        queryClient.invalidateQueries({queryKey:['documents']})
+        router.push(`/documents/${id}`)
     } catch (error) {
         const err = error as AxiosError<{ message: string }>
         toast.error(err?.response?.data.message || "Somthing went wrong")

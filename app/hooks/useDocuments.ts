@@ -21,6 +21,10 @@ const handleFetchAllUserDocuments = async (): Promise<UploadedDocument[]> => {
     return res.data.documents;
 }
 
+const handleSummarizeDocument = async (id: string) => {
+    const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
+    return res.data;
+};
 
 // HOOKS
 export const useDocumentById = (id?: string) => {
@@ -49,11 +53,27 @@ export const useDeleteDocument = (id?: string) => {
         }
     })
 }
-export const useDocuments =()=>{
+export const useDocuments = () => {
     return useQuery<UploadedDocument[]>({
         queryKey: ['documents'],
         queryFn: handleFetchAllUserDocuments,
         staleTime: 5 * 60 * 1000,
         refetchOnMount: false,
+    })
+}
+
+export const useSummarizeDocument = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: handleSummarizeDocument,
+        onSuccess: (data, id) => {
+            toast.success(data.message || 'Summary created successfully!');
+            queryClient.invalidateQueries({ queryKey: ['document', id] });
+        },
+        onError: (error: any) => {
+            const message =
+                error?.response?.data?.message || 'Something went wrong while summarizing';
+            toast.error(message);
+        },
     })
 }

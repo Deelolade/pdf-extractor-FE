@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
 import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
-import { useDeleteDocument, useDocumentById } from '@/app/hooks/useDocuments';
+import { useDeleteDocument, useDocumentById, useSummarizeDocument } from '@/app/hooks/useDocuments';
 
 const DocumentDetails = () => {
     const { user } = useUser();
@@ -22,6 +22,7 @@ const DocumentDetails = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
     const deleteDocument = useDeleteDocument();
+    const summarizeDocument = useSummarizeDocument();
     const openChatWithAI = (docId: string) => {
         router.push('/dashboard')
     }
@@ -44,21 +45,23 @@ const DocumentDetails = () => {
         setTimeout(() => setCopied(false), 2000);
     };
     const { data: document, isLoading, isError } = useDocumentById(id)
-    const fetchSummary = async (id: string) => {
-        setLoading(true)
-        try {
-            const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
-            console.log(res.data)
-            toast.success(res.data.message)
-            queryClient.invalidateQueries({ queryKey: ['document', id] })
-        } catch (error) {
-            const err = error as AxiosError<{ message: string }>
-            console.log('error:', error);
-            toast.error(err?.response?.data.message || "Something went wrong");
-        } finally {
-            setLoading(false)
-        }
-    }
+
+    // const fetchSummary = async (id: string) => {
+    //     setLoading(true)
+    //     try {
+    //         const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
+    //         console.log(res.data)
+    //         toast.success(res.data.message)
+    //         queryClient.invalidateQueries({ queryKey: ['document', id] })
+    //     } catch (error) {
+    //         const err = error as AxiosError<{ message: string }>
+    //         console.log('error:', error);
+    //         toast.error(err?.response?.data.message || "Something went wrong");
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+
     useEffect(() => {
         if (isError) {
             toast.error("Error occurred while fetching document");
@@ -75,7 +78,8 @@ const DocumentDetails = () => {
                     </div>
                     <div className="flex flex-wrap gap-3 justify-end mt-6">
                         <button
-                            onClick={() => fetchSummary(id)}
+                            onClick={() => summarizeDocument.mutate(id)}
+                            disabled={summarizeDocument.isPending}
                             className="px-5 py-2 text-sm font-medium bg-blue-700 hover:bg-blue-800 text-white rounded-md"
                         >
                             Regenerate Summary
@@ -152,7 +156,8 @@ const DocumentDetails = () => {
                                         It looks like this document hasn’t been summarized yet.
                                     </p>
                                     <button
-                                        onClick={() => fetchSummary(id)}
+                                        onClick={() => summarizeDocument.mutate(id)}
+                                        disabled={summarizeDocument.isPending}
                                         className="px-5 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-900 transition-colors"
                                     >
                                         Generate Summary
