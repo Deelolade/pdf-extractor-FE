@@ -20,7 +20,6 @@ const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("file", file)
     if (!file) {
         toast.error("No file found")
-        console.log("file not found")
         return;
     }
 

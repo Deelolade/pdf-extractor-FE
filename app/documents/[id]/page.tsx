@@ -8,7 +8,6 @@ const page = () => {
         <main className='bg-primary min-h-screen flex items-center justify-between'>
             <DashboardSidebar />
             <DocumentDetails/>
-
         </main>
     )
 }

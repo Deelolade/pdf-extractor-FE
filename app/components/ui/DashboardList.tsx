@@ -24,7 +24,7 @@ const DashboardList = () => {
                     <p>Summary</p>
                     <p>Actions</p>
                 </div>
-                <div className=" overflow-y-auto">
+                <div className=" overflow-y-auto max-h-[50vh]">
                     {documents && documents?.length > 0 ? (documents?.map((doc, idx) => {
                         return (
                             <div className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={doc._id || idx}>

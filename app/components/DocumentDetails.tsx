@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
 import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { useDeleteDocument, useDocumentById, useSummarizeDocument } from '@/app/hooks/useDocuments';
+import ChangeFileName from './ui/modals/ChangeFileName';
 
 const DocumentDetails = () => {
     const { user } = useUser();
@@ -21,6 +22,7 @@ const DocumentDetails = () => {
     const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
+    const [changeFileNameModalOpen, setChangeFileNameModalOpen] = useState(true);
     const deleteDocument = useDeleteDocument();
     const summarizeDocument = useSummarizeDocument();
     const openChatWithAI = (docId: string) => {
@@ -46,21 +48,9 @@ const DocumentDetails = () => {
     };
     const { data: document, isLoading, isError } = useDocumentById(id)
 
-    // const fetchSummary = async (id: string) => {
-    //     setLoading(true)
-    //     try {
-    //         const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
-    //         console.log(res.data)
-    //         toast.success(res.data.message)
-    //         queryClient.invalidateQueries({ queryKey: ['document', id] })
-    //     } catch (error) {
-    //         const err = error as AxiosError<{ message: string }>
-    //         console.log('error:', error);
-    //         toast.error(err?.response?.data.message || "Something went wrong");
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
+   const handleChangeFileName =()=>{
+    console.log("clicked")
+   }
 
     useEffect(() => {
         if (isError) {
@@ -72,7 +62,7 @@ const DocumentDetails = () => {
             {(isLoading || loading) && <Loading />}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
-                    <div className="">
+                    <div className="" onClick={handleChangeFileName}>
                         <h2 className='text-2xl font-bold text-slate-800 mb-1 p-2 rounded-lg'>{document?.fileName}</h2>
                         <p className="text-sm text-slate-500">Uploaded by {user?.name || "You"}</p>
                     </div>
@@ -143,7 +133,7 @@ const DocumentDetails = () => {
                         </div>
                         <div className=" ">
                             <div className='mx-auto  max-h-[60vh] overflow-y-auto'>{document?.summary ? (
-                                <div className="mt-10  bg-white p-5 shadow-lg rounded-lg">
+                                <div className="mt-10 bg-white p-5 shadow-lg rounded-lg">
                                     <div className="text-sm font-semibold text-center text-gray-800 leading-loose break-w ords whitespace-pre-wrap">
                                         {document.summary.split(" ").join(" ")}
                                     </div>
@@ -180,6 +170,7 @@ const DocumentDetails = () => {
                     </div>
                 </div>
             </div>
+            {changeFileNameModalOpen && (<ChangeFileName/>)}
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full">
