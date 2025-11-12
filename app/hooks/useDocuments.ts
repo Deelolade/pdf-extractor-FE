@@ -5,6 +5,10 @@ import { API_URL } from "../config/env";
 import { toast } from "react-toastify";
 
 
+interface updateDocument {
+    id: string;
+  fileName: string;
+}
 // FUNCTIONS
 const handleDocument = async (id: string): Promise<UploadedDocument> => {
     const res = await axios.get(`${API_URL}/document/${id}`, { withCredentials: true })
@@ -25,13 +29,17 @@ const handleSummarizeDocument = async (id: string) => {
     const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
     return res.data;
 };
+const handleUpdateDocument = async ({id, fileName} : updateDocument) => {
+    const res = await axios.patch(`${API_URL}/document/update/${id}`,{ fileName }, { withCredentials: true });
+    return res.data;
+};
 
 // HOOKS
 export const useDocumentById = (id?: string) => {
     return useQuery<UploadedDocument>({
         queryKey: ['document', id],
         queryFn: () => handleDocument(id!),
-        staleTime: 10 * 60 * 1000,
+        // staleTime: 10 * 60 * 1000,
         refetchOnMount: false,
         enabled: Boolean(id),
     })
@@ -73,6 +81,25 @@ export const useSummarizeDocument = () => {
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message || 'Something went wrong while summarizing';
+            toast.error(message);
+        },
+    })
+}
+export const useUpdateDocumentName = ()=>{
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: handleUpdateDocument,
+         onSuccess:async (data, id) => {
+            console.log(data)
+            toast.success(data.message || 'Document name updated successfully!');
+            queryClient.invalidateQueries({ queryKey: ['document', id], refetchType: 'active'});
+            queryClient.invalidateQueries({ queryKey: ['documents',] });
+            await queryClient.refetchQueries({ queryKey: ['document', id] });
+        },
+        onError: (error: any) => {
+            const message =
+                error?.response?.data?.message || 'Something went wrong while updating the name';
             toast.error(message);
         },
     })

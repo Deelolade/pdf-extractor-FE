@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
 import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
-import { useDeleteDocument, useDocumentById, useSummarizeDocument } from '@/app/hooks/useDocuments';
+import { useDeleteDocument, useDocumentById, useSummarizeDocument, useUpdateDocumentName } from '@/app/hooks/useDocuments';
 import ChangeFileName from './ui/modals/ChangeFileName';
 
 const DocumentDetails = () => {
@@ -25,6 +25,7 @@ const DocumentDetails = () => {
     const [changeFileNameModalOpen, setChangeFileNameModalOpen] = useState(false);
     const deleteDocument = useDeleteDocument();
     const summarizeDocument = useSummarizeDocument();
+    const updateDocument = useUpdateDocumentName()
     const openChatWithAI = (docId: string) => {
         router.push('/dashboard')
     }
@@ -48,8 +49,8 @@ const DocumentDetails = () => {
     };
     const { data: document, isLoading, isError } = useDocumentById(id)
 
-   const handleChangeFileName =()=>{
-    console.log("clicked")
+   const handleChangeFileName =(newName: string)=>{
+    updateDocument.mutate({ id: document?._id ?? ' ', fileName: newName})
    }
 
     useEffect(() => {

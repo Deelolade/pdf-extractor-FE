@@ -25,7 +25,7 @@ const ChangeFileName = ({ onClose, isOpen, currentName, onConfirm }: RenameModal
                     type="text"
                     value={fileName}
                     onChange={(e) => setFileName(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md p-2 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-md p-2 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-slate-700"
                     placeholder="Enter new file name"
                 />
 
@@ -42,7 +42,7 @@ const ChangeFileName = ({ onClose, isOpen, currentName, onConfirm }: RenameModal
                             onClose();
                         }}
                         disabled={!fileName.trim()}
-                        className="px-4 py-2 text-sm font-medium rounded-md bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                        className="px-4 py-2 text-sm font-medium rounded-md bg-slate-700 hover:bg-slate-800 text-white disabled:opacity-50"
                     >
                         Save
                     </button>
