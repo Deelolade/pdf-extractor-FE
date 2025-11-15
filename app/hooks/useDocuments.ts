@@ -54,6 +54,8 @@ export const useDeleteDocument = (id?: string) => {
             toast.success(data.message || 'Document deleted successfully');
             queryClient.invalidateQueries({ queryKey: ['document', id] });
             queryClient.invalidateQueries({ queryKey: ['documents'] });
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            
         },
         onError: (error: any) => {
             const message = error?.response?.data?.message || "Something went wrong while deleting document"
@@ -77,6 +79,9 @@ export const useSummarizeDocument = () => {
         onSuccess: (data, id) => {
             toast.success(data.message || 'Summary created successfully!');
             queryClient.invalidateQueries({ queryKey: ['document', id] });
+            queryClient.invalidateQueries({ queryKey: ['documents'] });
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+
         },
         onError: (error: any) => {
             const message =
@@ -95,7 +100,9 @@ export const useUpdateDocumentName = ()=>{
             toast.success(data.message || 'Document name updated successfully!');
             queryClient.invalidateQueries({ queryKey: ['document', id], refetchType: 'active'});
             queryClient.invalidateQueries({ queryKey: ['documents',] });
+            queryClient.invalidateQueries({ queryKey: ['user'] });
             await queryClient.refetchQueries({ queryKey: ['document', id] });
+
         },
         onError: (error: any) => {
             const message =

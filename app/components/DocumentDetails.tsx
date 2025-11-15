@@ -61,7 +61,7 @@ const DocumentDetails = () => {
     }, [isError])
     return (
         <section className='flex-1 min-h-screen py-6 px-8'>
-            {(isLoading || loading) && <Loading />}
+            {(isLoading || loading || summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading/>}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
                     <div className="" onClick={()=> setChangeFileNameModalOpen(true)}>
@@ -74,7 +74,7 @@ const DocumentDetails = () => {
                             disabled={summarizeDocument.isPending}
                             className="px-5 py-2 text-sm font-medium bg-blue-700 hover:bg-blue-800 text-white rounded-md"
                         >
-                            Regenerate Summary
+                            {document?.summary ? " Regenerate Summary": "Generate Summary"}
                         </button>
 
                         {/* Copy Summary Button */}
