@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { API_URL } from '../config/env'
 import { IoCloudUploadOutline } from 'react-icons/io5'
@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 
 const UploadDocument = () => {
     const router = useRouter();
+    const [loading, setLoading]= useState(false)
     const queryClient = useQueryClient()
     const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -19,7 +20,9 @@ const UploadDocument = () => {
     
         const formData = new FormData();
         formData.append("document", file)
+        setLoading(true)
         try {
+
             const res = await axios.post(`${API_URL}/document/create`, formData, {
                 withCredentials: true,
                 headers: {
@@ -35,6 +38,9 @@ const UploadDocument = () => {
             const err = error as AxiosError<{ message: string }>
             toast.error(err?.response?.data.message || "Somthing went wrong")
             console.log(error)
+        }
+        finally{
+            setLoading(false)
         }
     }
   return (
