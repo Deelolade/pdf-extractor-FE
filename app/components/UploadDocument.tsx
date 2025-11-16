@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 
 const UploadDocument = () => {
     const router = useRouter();
-    const [loading, setLoading]= useState(false)
+    const [loading, setLoading] = useState(false)
     const queryClient = useQueryClient()
     const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -17,7 +17,16 @@ const UploadDocument = () => {
             toast.error("No file found")
             return;
         }
-    
+        if (file.size > 10 * 1024 * 1024) {
+            toast.error("File too large (max 10MB)");
+            return;
+        }
+
+        if (!["application/pdf"].includes(file.type)) {
+            toast.error("Only PDF files are allowed");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("document", file)
         setLoading(true)
@@ -32,19 +41,19 @@ const UploadDocument = () => {
             toast.success("uploaded successfully")
             console.log(res.data)
             const id = res.data.uploadId
-            queryClient.invalidateQueries({queryKey:['documents']})
+            queryClient.invalidateQueries({ queryKey: ['documents'] })
             router.push(`/documents/${id}`)
         } catch (error) {
             const err = error as AxiosError<{ message: string }>
             toast.error(err?.response?.data.message || "Somthing went wrong")
             console.log(error)
         }
-        finally{
+        finally {
             setLoading(false)
         }
     }
-  return (
-    <div className="">
+    return (
+        <div className="">
             <div className="relative mt-8 m-3">
                 <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-slate-900 transition-colors duration-500 bg-gray-50 hover:bg-blue-50">
                     <div className="flex flex-col items-center justify-center space-y-4">
@@ -76,7 +85,7 @@ const UploadDocument = () => {
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default UploadDocument
