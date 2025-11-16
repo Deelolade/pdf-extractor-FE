@@ -40,6 +40,7 @@ export const useDocumentById = (id?: string) => {
         queryKey: ['document', id],
         queryFn: () => handleDocument(id!),
         // staleTime: 10 * 60 * 1000,
+         refetchOnWindowFocus: true, 
         refetchOnMount: false,
         enabled: Boolean(id),
     })
@@ -101,7 +102,7 @@ export const useUpdateDocumentName = ()=>{
             queryClient.invalidateQueries({ queryKey: ['document', id], refetchType: 'active'});
             queryClient.invalidateQueries({ queryKey: ['documents',] });
             queryClient.invalidateQueries({ queryKey: ['user'] });
-            await queryClient.refetchQueries({ queryKey: ['document', id] });
+            await queryClient.refetchQueries({ queryKey: ['document', id] , exact: true });
 
         },
         onError: (error: any) => {

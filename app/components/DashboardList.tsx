@@ -2,7 +2,7 @@
 
 
 import { useRouter } from "next/navigation"
-import Loading from "./Loading"
+import Loading from "./ui/Loading"
 import { useDocuments } from "@/app/hooks/useDocuments"
 
 const DashboardList = () => {
@@ -14,6 +14,7 @@ const DashboardList = () => {
     };
     return (
         <div className="mt-6 flex-1 px-4">
+            {isError && <p className="text-lg text-red-500">error loading page</p>}
             {isLoading && <Loading />}
             <h3 className="text-xl font-bold">Uploaded Documents</h3>
             <div className="mt-4 rounded-2xl border border-gray-400 py-2">

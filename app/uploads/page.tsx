@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardList from '../components/ui/DashboardList'
+import DashboardList from '../components/DashboardList'
 import DashboardSidebar from '../components/DashboardSidebar'
 
 const page = () => {
