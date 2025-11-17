@@ -5,6 +5,7 @@ import { API_URL } from '../config/env'
 import { IoCloudUploadOutline } from 'react-icons/io5'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import Loading from './ui/Loading'
 
 const UploadDocument = () => {
     const router = useRouter();
@@ -54,6 +55,7 @@ const UploadDocument = () => {
     }
     return (
         <div className="">
+            {loading && <Loading/>}
             <div className="relative mt-8 m-3">
                 <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-slate-900 transition-colors duration-500 bg-gray-50 hover:bg-blue-50">
                     <div className="flex flex-col items-center justify-center space-y-4">
