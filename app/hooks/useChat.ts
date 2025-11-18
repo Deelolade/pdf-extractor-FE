@@ -11,6 +11,7 @@ export const useChats =(id?:string)=>{
     return useQuery({
         queryKey:['chat', id],
         queryFn:()=> getPreviousChats(id!),
+        staleTime:0,
         refetchOnWindowFocus: true, 
         refetchOnReconnect: true,
         refetchOnMount: true,

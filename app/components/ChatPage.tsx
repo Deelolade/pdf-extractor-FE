@@ -5,6 +5,9 @@ import axios from "axios";
 import { API_URL } from "../config/env";
 import { useParams } from "next/navigation";
 import { useChats } from "../hooks/useChat";
+import { useQueryClient } from "@tanstack/react-query";
+import { FaArrowLeft } from "react-icons/fa6";
+import { useRouter } from "next/navigation"
 
 type Message = {
   role: "user" | "assistant";
@@ -12,15 +15,22 @@ type Message = {
 };
 
 export default function ChatPage() {
-  const {id}= useParams()
-  console.log(`id:${id}`)
-  // const [messages, setMessages] = useState<Message[]>([]);
+  const params = useParams()
+  const id = params.id as string;
+const route = useRouter()
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const { data:messages, isLoading, isError} = useChats(id)
-
+  const { data: savedMessages=[], isLoading, isError} = useChats(id)
+  const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
+  // Local optimistic messages (only unsaved ones)
+  const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
+  const [isSending, setIsSending] = useState(false);
+
+  // Combine saved + pending messages
+  const allMessages = [...savedMessages, ...pendingMessages];
   // Auto-scroll on new message
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,7 +40,6 @@ export default function ChatPage() {
     if (!input.trim() || loading) return;
 
     const newUserMessage: Message = {
-      id: crypto.randomUUID(),
       role: "user",
       content: input,
     };
@@ -42,21 +51,19 @@ export default function ChatPage() {
     try {
       const res = await axios.post(`${API_URL}/document/chat/${id}`, {
         message: input,
-        history: messages, // optional
       }, {withCredentials: true});
 
       const aiMessage: Message = {
-        id: crypto.randomUUID(),
         role: "assistant",
         content: res.data.reply,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+      queryClient.invalidateQueries({queryKey: ['chat', id]})
     } catch (err) {
       const errorMessage: Message = {
-        id: crypto.randomUUID(),
         role: "assistant",
-        content: "❗ Something went wrong. Please try again.",
+        content: "Something went wrong. Please try again.",
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -67,12 +74,18 @@ export default function ChatPage() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>  
     e.key === "Enter" && !e.shiftKey ? (e.preventDefault(), sendMessage()) : null;
   console.log(messages)
+  const handleRouteToUpload =(id: string)=>{
+    route.push(`/documents/${id}`)
+  }
   return (
-    <div className="flex-1">
-        <div className="flex flex-col max-w-5xl mx-auto justify-center h-screen max-h-screen">
+    <section className="flex-1 max-h-screen h-screen">
+      <div className="bg-white/10 h-18 absolute w-[80%] shadow-2xl backdrop-blur-xl p-5 flex items-center">
+        <button className="hover:bg-gray-300 p-2 rounded-md" onClick={()=> handleRouteToUpload(id)}><FaArrowLeft className="scale-125"/></button>
+      </div>
+        <div className="flex flex-col max-w-5xl mx-auto justify-center h-full">
       {/* Chat window */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 ">
-        {messages?.map((msg:any, idx:any) => (
+        {savedMessages ?.map((msg:any, idx:any) => (
           <div
             key={idx}
             className={`flex ${
@@ -119,6 +132,6 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
-    </div>
+    </section>
   );
 }

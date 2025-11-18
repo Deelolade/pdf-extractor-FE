@@ -28,7 +28,7 @@ const DashboardSidebar = () => {
           <Link href="/dashboard" className={`w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium ${pathName === "/dashboard" ? "bg-gray-700": "hover:bg-gray-800"}`}>
             <PiSquaresFourBold className="h-6 w-6 mr-3" /> Dashboard
           </Link>
-          <Link href="/uploads" className="w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium">
+          <Link href="/uploads" className={`w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium ${pathName === "/uploads" ? "bg-gray-700": "hover:bg-gray-800"}`}>
             <FaRegCaretSquareUp className="h-6 w-6 mr-3" /> Uploads
           </Link>
           <Link href="/analyses" className="w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium">
