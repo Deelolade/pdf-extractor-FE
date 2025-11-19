@@ -19,34 +19,26 @@ export default function ChatPage() {
   const id = params.id as string;
   console.log(id)
   const route = useRouter()
-  // const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  // const [loading, setLoading] = useState(false);
   const { data: savedMessages = [], isLoading, isError } = useChats(id)
   const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   // Local optimistic messages (only unsaved ones)
-  const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
+  // const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
   const [isSending, setIsSending] = useState(false);
 
   // Combine saved + pending messages
-  const allMessages = [...savedMessages, ...pendingMessages];
+  // const allMessages = [...savedMessages, ...pendingMessages];
   // Auto-scroll on new message
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [allMessages]);
+  }, [savedMessages]);
 
   const sendMessage = async () => {
     if (!input.trim() || isSending) return;
 
-    const newUserMessage: Message = {
-      role: "user",
-      content: input,
-    };
-
-    setPendingMessages((prev) => [...prev, newUserMessage]);
     setInput("");
     setIsSending(true);
 
@@ -54,20 +46,9 @@ export default function ChatPage() {
       const res = await axios.post(`${API_URL}/document/chat/${id}`, {
         message: input.trim(),
       }, { withCredentials: true });
-
-      const aiMessage: Message = {
-        role: "assistant",
-        content: res.data.reply,
-      };
-
-      setPendingMessages((prev) => [...prev, aiMessage]);
       queryClient.invalidateQueries({ queryKey: ['chat', id] })
     } catch (err) {
-      const errorMessage: Message = {
-        role: "assistant",
-        content: "Something went wrong. Please try again.",
-      };
-      setPendingMessages((prev) => [...prev, errorMessage]);
+      console.log(err)
     } finally {
       setIsSending(false);
     }
@@ -75,20 +56,19 @@ export default function ChatPage() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>
     e.key === "Enter" && !e.shiftKey ? (e.preventDefault(), sendMessage()) : null;
-  // console.log(messages)
-  const handleRouteToUpload = (id: string) => {
+  const returnToDocument = (id: string) => {
     route.push(`/documents/${id}`)
   }
   return (
     <section className="flex-1 max-h-screen h-screen">
       <div className="bg-white/10 h-18 absolute w-[80%] shadow-2xl backdrop-blur-xl p-5 flex items-center">
-        <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => handleRouteToUpload(id)}><FaArrowLeft className="scale-125" /></button>
+        <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => returnToDocument(id)}><FaArrowLeft className="scale-125" /></button>
       </div>
       <div className="flex flex-col max-w-5xl mx-auto justify-center h-full pt-18">
         {/* Chat window */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 ">
-          {allMessages.length > 0 ? (
-             allMessages.map((msg, idx) => (
+          {savedMessages.length > 0 ? (
+             savedMessages.map((msg:Message, idx:string) => (
             <div
               key={idx}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
@@ -126,7 +106,6 @@ export default function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-
             <button
               onClick={sendMessage}
               disabled={isSending}
