@@ -28,8 +28,8 @@ const DashboardList = () => {
                             <span>Last 30 days</span>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1  gap-6">
-                        {documents && documents.map((doc, idx) => (
+                    <div className="grid grid-cols-1  gap-6 overflow-y-auto max-h-[60vh]">
+                        {documents && documents?.length > 0 ? (documents.map((doc, idx) => (
                             <div key={idx} className="bg-slate-800 rounded-2xl p-6 border border-slate-700 hover:border-slate-600 transition-all hover:shadow-xl">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex-1">
@@ -54,33 +54,36 @@ const DashboardList = () => {
                                             <span>{new Date(doc.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </div>
-                                    <button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    <button
+                                        onClick={() => handleViewDocument(doc._id)}
+                                        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                         <Eye className="w-4 h-4" />
                                         View
                                     </button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    {/* <div className=" overflow-y-auto max-h-[50vh]">
-                    {documents && documents?.length > 0 ? (documents?.map((doc, idx) => {
-                        return (
-                            <div className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={doc._id || idx}>
-                                <p>{doc.fileName}</p>
-                                <p>{new Date(doc.createdAt).toLocaleDateString()}</p>
-                                <p className="text-center">{doc.wordCount}</p>
-                                <p>{doc?.summary
-                                    ? doc.summary.split(" ").slice(0, 20).join(" ") + (doc.summary.split(" ").length > 30 ? "..." : "")
-                                    : "No summary yet"}</p>
-                                <div className="">
-                                    <button className=" text-white px-6 py-2 bg-[#1F2937] rounded-lg" onClick={() => handleViewDocument(doc._id)} >View</button>
-                                </div>
+                        ))) : (
+                            <div className="flex flex-col items-center justify-center py-12 px-6 text-center rounded-2xl border border-dashed border-indigo-600/50">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-14 h-14 text-slate-500 mb-3"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v2m-7 0h7" />
+                                </svg>
+
+                                <h3 className="text-xl font-medium  text-slate-900 mb-1">
+                                    No Documents Uploaded Yet
+                                </h3>
+
+                                <p className="text-gray-600">
+                                    Start analyzing! Please navigate to the **Uploads** page to add your documents.
+                                </p>
                             </div>
-                        )
-                    })) : (<p className="text-center text-gray-600 py-8">
-                        You have not uploaded any documents yet !!
-                    </p>)}
-                </div> */}
+                        )}
+                    </div>
                 </div>
             </div>
         </>
