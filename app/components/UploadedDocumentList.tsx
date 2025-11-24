@@ -4,11 +4,10 @@
 import { useRouter } from "next/navigation"
 import Loading from "./ui/Loading"
 import { useDocuments } from "@/app/hooks/useDocuments"
-import UploadDocument from "./UploadDocument"
 import { BarChart3, Clock, Eye, FileText, Folder, Upload } from "lucide-react"
-import { DashboardStats } from "./DashboardStats"
+import UploadDocument from "./UploadDocument"
 
-const DashboardList = () => {
+const UploadedDocumentList = () => {
     const route = useRouter();
     const { data: documents, isLoading, isError } = useDocuments();
 
@@ -17,7 +16,8 @@ const DashboardList = () => {
     };
     return (
         <>
-            <div className="mt-4 flex-1 px-4">
+            <div className="mt-4 flex-1 px-6">
+        <UploadDocument/>
                 {/* {isError && <p className="text-lg text-red-500 absolute top-1/2 left-1/2">error loading page</p>} */}
                 {isLoading && <Loading />}
                 <div className="mt-4 rounded-2xl  py-2 ">
@@ -104,4 +104,4 @@ const DashboardList = () => {
     )
 }
 
-export default DashboardList
+export default UploadedDocumentList

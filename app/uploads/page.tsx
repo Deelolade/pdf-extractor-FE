@@ -1,12 +1,11 @@
-import React from 'react'
-import DashboardList from '../components/DashboardList'
 import DashboardSidebar from '../components/DashboardSidebar'
+import UploadedDocumentList from '../components/UploadedDocumentList'
 
 const page = () => {
   return (
     <main className='flex justify-between items-start '>
       <DashboardSidebar/>
-        <DashboardList/>
+        <UploadedDocumentList/>
     </main>
   )
 }
