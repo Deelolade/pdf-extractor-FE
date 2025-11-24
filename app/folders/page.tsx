@@ -1,11 +1,12 @@
 import DashboardSidebar from '../components/DashboardSidebar'
-import UploadedDocumentList from '../components/UploadedDocumentList'
+import FoldersList from '../components/FolderList'
+// import UploadedDocumentList from '../components/UploadedDocumentList'
 
 const page = () => {
   return (
     <main className='flex justify-between items-start '>
       <DashboardSidebar/>
-      <UploadedDocumentList/>
+      <FoldersList/>
     </main>
   )
 }
