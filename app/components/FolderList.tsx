@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Check, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
+import AddDocumentModal from './ui/modals/AddDocumentModal';
 
-interface Document {
+export interface Document {
   id: number;
   name: string;
   wordCount: number;
@@ -328,56 +329,14 @@ const FoldersPage: React.FC = () => {
 
       {/* Add Documents Modal */}
       {showAddDocModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">
-              Add Documents to &quot;{selectedFolder?.name}&quot;
-            </h2>
-
-            <div className="space-y-2 mb-6">
-              {availableDocuments.map((doc) => (
-                <div
-                  key={doc.id}
-                  onClick={() => toggleDocSelection(doc.id)}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    selectedDocs.includes(doc.id)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 flex-1">
-                      <FileText className="w-5 h-5 text-slate-400" />
-                      <div>
-                        <h4 className="font-medium text-slate-800">{doc.name}</h4>
-                        <p className="text-sm text-slate-500">{doc.wordCount.toLocaleString()} words</p>
-                      </div>
-                    </div>
-                    {selectedDocs.includes(doc.id) && (
-                      <Check className="w-5 h-5 text-blue-600" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowAddDocModal(false)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={addDocumentsToFolder}
-                disabled={selectedDocs.length === 0}
-                className="flex-1 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 font-medium transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
-              >
-                Add {selectedDocs.length} Document{selectedDocs.length !== 1 ? 's' : ''}
-              </button>
-            </div>
-          </div>
-        </div>
+        <AddDocumentModal
+        selectedFolder={selectedFolder}
+        availableDocuments={availableDocuments}
+        toggleDocSelection={toggleDocSelection}
+        selectedDocs={selectedDocs}
+        addDocumentsToFolder={addDocumentsToFolder}
+        setShowAddDocModal={setShowAddDocModal}
+        />
       )}
     </div>
   );

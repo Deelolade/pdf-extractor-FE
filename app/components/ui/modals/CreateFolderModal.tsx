@@ -1,16 +1,15 @@
 import React from 'react'
 
-type createFolderModalProps = {
-    newFolderName: string,
-    setNewFolderName: (name: string) => void,
-    colors: { name: string; class: string }[],
-    setShowCreateModal: (value: boolean) => void,
-    setSelectedColor: (name: string) => void,
-    selectedColor: string,
-    createFolder: () => void
-
+interface CreateFolderModalProps {
+    newFolderName: string;
+    setNewFolderName: (name: string) => void;
+    colors: { name: string; class: string }[];
+    setShowCreateModal: (value: boolean) => void;
+    setSelectedColor: (name: string) => void;
+    selectedColor: string;
+    createFolder: () => void;
 }
-const CreateFolderModal = ({ newFolderName, setNewFolderName, colors, setShowCreateModal, setSelectedColor, selectedColor, createFolder }: createFolderModalProps) => {
+const CreateFolderModal = ({ newFolderName, setNewFolderName, colors, setShowCreateModal, setSelectedColor, selectedColor, createFolder }: CreateFolderModalProps) => {
     return (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
