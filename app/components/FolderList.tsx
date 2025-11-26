@@ -73,9 +73,9 @@ const FoldersPage: React.FC = () => {
 
   const [availableDocuments] = useState<Document[]>([
     { id: 7, name: "Marketing Strategy 2024", wordCount: 5421 },
-    { id: 8, name: "Financial Report Q3", wordCount: 6789 },
-    { id: 9, name: "Team Meeting Notes", wordCount: 1234 },
-    { id: 10, name: "Product Roadmap", wordCount: 3456 }
+    // { id: 8, name: "Financial Report Q3", wordCount: 6789 },
+    // { id: 9, name: "Team Meeting Notes", wordCount: 1234 },
+    // { id: 10, name: "Product Roadmap", wordCount: 3456 }
   ]);
 
   const [searchQuery, setSearchQuery] = useState<string>("");

@@ -22,9 +22,8 @@ const AddDocumentModal = ({selectedFolder,availableDocuments, toggleDocSelection
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 max-h-[80vh] overflow-y-auto">
             <h2 className="text-2xl font-bold text-slate-800 mb-4">
-              Add Documents to &quot;{selectedFolder?.name}&quot;
+              {`Add Documents to "${selectedFolder?.name}"`}
             </h2>
-
             <div className="space-y-2 mb-6">
               {availableDocuments.map((doc) => (
                 <div
