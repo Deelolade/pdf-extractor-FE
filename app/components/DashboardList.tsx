@@ -4,14 +4,20 @@
 import { useRouter } from "next/navigation"
 import Loading from "./ui/Loading"
 import { useDocuments } from "@/app/hooks/useDocuments"
-import UploadDocument from "./UploadDocument"
-import { BarChart3, Clock, Eye, FileText, Folder, Upload } from "lucide-react"
-import { DashboardStats } from "./DashboardStats"
-
+import { Clock, Eye, FileText, } from "lucide-react"
+import { useDocumentStore } from "../store/documentStore"
+import { useEffect } from "react"
 const DashboardList = () => {
-    const route = useRouter();
-    const { data: documents, isLoading, isError } = useDocuments();
+  const route = useRouter();
+  const {setDocuments } = useDocumentStore();
+  
+  const { data: documents, isLoading, isError } = useDocuments();
 
+  useEffect(() => {
+  if (documents) {
+    setDocuments(documents); // persist fetched documents
+  }
+}, [documents, setDocuments]);
     const handleViewDocument = (id: string) => {
         route.push(`documents/${id}`);
     };

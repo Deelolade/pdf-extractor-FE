@@ -1,9 +1,10 @@
 'use client'
 import React, { useState } from 'react';
-import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Check, Calendar, FilePlus } from 'lucide-react';
+import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
 import { useCreateFolder, useDeleteFolder, useFetchUserFolders } from '../hooks/useFolders';
+import { useDocumentStore } from '../store/documentStore';
 
 export interface Document {
   id: number;
@@ -26,57 +27,9 @@ interface ColorOption {
 }
 
 const FoldersPage: React.FC = () => {
-  // const [folders, setFolders] = useState<FolderType[]>([
-  //   {
-  //     id: 1,
-  //     name: "Academic Papers",
-  //     documentIds: [],
-  //     updatedAt: "2025-10-15",
-  //     color: "blue",
-  //     documents: [
-  //       { id: 1, name: "Differences of Opinion Amongst the Scholars", wordCount: 10862 },
-  //       { id: 2, name: "Research Methodology", wordCount: 8543 }
-  //     ]
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Project Documentation",
-  //     documentIds: [],
-  //     updatedAt: "2025-10-15",
-  //     color: "green",
-  //     documents: [
-  //       { id: 3, name: "Project Python", wordCount: 25 },
-  //       { id: 4, name: "API Documentation", wordCount: 3421 }
-  //     ]
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Personal",
-  //     documentIds: [],
-  //     updatedAt: "2025-10-15",
-  //     color: "purple",
-  //     documents: [
-  //       { id: 5, name: "Resume0", wordCount: 416 }
-  //     ]
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Travel & Tourism",
-  //     documentIds: [],
-  //     updatedAt: "2025-10-15",
-  //     color: "orange",
-  //     documents: [
-  //       { id: 6, name: "VoyagePro", wordCount: 746 }
-  //     ]
-  //   }
-  // ]);
+  
 
-  const [availableDocuments] = useState<Document[]>([
-    { id: 7, name: "Marketing Strategy 2024", wordCount: 5421 },
-    // { id: 8, name: "Financial Report Q3", wordCount: 6789 },
-    // { id: 9, name: "Team Meeting Notes", wordCount: 1234 },
-    // { id: 10, name: "Product Roadmap", wordCount: 3456 }
-  ]);
+ 
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
@@ -89,6 +42,8 @@ const FoldersPage: React.FC = () => {
   const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
   const deleteOldFolder = useDeleteFolder()
+  const {documents } = useDocumentStore();
+  console.log(documents)
   const colors: ColorOption[] = [
     { name: "blue", class: "bg-blue-500" },
     { name: "green", class: "bg-green-500" },
@@ -98,6 +53,7 @@ const FoldersPage: React.FC = () => {
     { name: "red", class: "bg-red-500" }
   ];
 
+  //  const [availableDocuments] = documents;
   const createFolder = (): void => {
     createNewFolder.mutate(newFolderName)
     
@@ -334,7 +290,7 @@ const FoldersPage: React.FC = () => {
       {showAddDocModal && (
         <AddDocumentModal
         selectedFolder={selectedFolder}
-        availableDocuments={availableDocuments}
+        availableDocuments={documents}
         toggleDocSelection={toggleDocSelection}
         selectedDocs={selectedDocs}
         addDocumentsToFolder={addDocumentsToFolder}

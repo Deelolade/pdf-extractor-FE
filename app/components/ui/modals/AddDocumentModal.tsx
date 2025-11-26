@@ -1,6 +1,7 @@
 import React from 'react'
 import { Document } from '../../FolderList';
 import { Check, FileText } from 'lucide-react';
+import { UploadedDocument } from '@/app/types/document';
 
 type selectedFolder = {
     _id: string,
@@ -10,7 +11,7 @@ type selectedFolder = {
 
 interface CreateFolderModalProps {
     selectedFolder: selectedFolder | null;
-    availableDocuments: Document[];
+    availableDocuments: UploadedDocument[];
     toggleDocSelection: (docId: number) => void;
     selectedDocs: number[];
     setShowAddDocModal: (value: boolean) => void;
@@ -25,12 +26,12 @@ const AddDocumentModal = ({selectedFolder,availableDocuments, toggleDocSelection
               {`Add Documents to "${selectedFolder?.name}"`}
             </h2>
             <div className="space-y-2 mb-6">
-              {availableDocuments.map((doc) => (
+              {availableDocuments.map((doc, idx) => (
                 <div
-                  key={doc.id}
-                  onClick={() => toggleDocSelection(doc.id)}
+                  key={idx}
+                  onClick={() => toggleDocSelection(doc._id)}
                   className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    selectedDocs.includes(doc.id)
+                    selectedDocs.includes(doc._id)
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
@@ -39,11 +40,11 @@ const AddDocumentModal = ({selectedFolder,availableDocuments, toggleDocSelection
                     <div className="flex items-center gap-3 flex-1">
                       <FileText className="w-5 h-5 text-slate-400" />
                       <div>
-                        <h4 className="font-medium text-slate-800">{doc.name}</h4>
+                        <h4 className="font-medium text-slate-800">{doc.fileName}</h4>
                         <p className="text-sm text-slate-500">{doc.wordCount.toLocaleString()} words</p>
                       </div>
                     </div>
-                    {selectedDocs.includes(doc.id) && (
+                    {selectedDocs.includes(doc._id) && (
                       <Check className="w-5 h-5 text-blue-600" />
                     )}
                   </div>
