@@ -259,7 +259,7 @@ const FoldersPage: React.FC = () => {
                 </div>
                 <h3 className="text-white font-semibold text-lg mb-1">{folder.name}</h3>
                 <p className="text-white text-opacity-90 text-sm">
-                  {folder.documentIds.length} document{folder.documentIds.length !== 1 ? 's' : ''}
+                  {folder.documents.length} document{folder.documents.length !== 1 ? 's' : ''}
                 </p>
               </div>
 
@@ -273,7 +273,7 @@ const FoldersPage: React.FC = () => {
                 {/* Expanded View - Show Documents */}
                 {expandedFolder === folder._id && (
                   <div className="mt-4 space-y-2">
-                    {folder.documentIds.length > 0 ? (
+                    {folder.documents.length > 0 ? (
                       folder.documents.map((doc) => (
                         <div
                           key={doc.id}
