@@ -10,7 +10,7 @@ const CreateNewFolder = async (name:string)=>{
 }
 
 const getAllUserFolders = async () => {
-    const res = await axios.get(`${API_URL}/folders/user`, { withCredentials: true });
+    const res = await axios.get(`${API_URL}/folders/me`, { withCredentials: true });
     return res.data.folders;
 }
 const deleteFolder =  async (id:string)=>{

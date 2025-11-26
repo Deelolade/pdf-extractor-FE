@@ -38,7 +38,7 @@ const FoldersPage: React.FC = () => {
   const [expandedFolder, setExpandedFolder] = useState<string | null>(null);
   const [newFolderName, setNewFolderName] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("blue");
-  const [selectedDocs, setSelectedDocs] = useState<number[]>([]);
+  const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
   const deleteOldFolder = useDeleteFolder()
@@ -85,7 +85,7 @@ const FoldersPage: React.FC = () => {
     setShowAddDocModal(true);
   };
 
-  const toggleDocSelection = (docId: number): void => {
+  const toggleDocSelection = (docId: string): void => {
     setSelectedDocs(prev =>
       prev.includes(docId)
         ? prev.filter(id => id !== docId)

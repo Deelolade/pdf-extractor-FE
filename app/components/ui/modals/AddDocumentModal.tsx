@@ -12,8 +12,8 @@ type selectedFolder = {
 interface CreateFolderModalProps {
     selectedFolder: selectedFolder | null;
     availableDocuments: UploadedDocument[];
-    toggleDocSelection: (docId: number) => void;
-    selectedDocs: number[];
+    toggleDocSelection: (docId: string) => void;
+    selectedDocs: string[];
     setShowAddDocModal: (value: boolean) => void;
     addDocumentsToFolder: () => void;
 }
