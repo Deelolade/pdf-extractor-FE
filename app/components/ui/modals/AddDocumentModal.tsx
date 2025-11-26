@@ -3,7 +3,7 @@ import { Document } from '../../FolderList';
 import { Check, FileText } from 'lucide-react';
 
 type selectedFolder = {
-    _id: number,
+    _id: string,
     name:string,
 
 }

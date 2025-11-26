@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Check, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
-import { useCreateFolder, useFetchUserFolders } from '../hooks/useFolders';
+import { useCreateFolder, useDeleteFolder, useFetchUserFolders } from '../hooks/useFolders';
 
 export interface Document {
   id: number;
@@ -12,9 +12,9 @@ export interface Document {
 }
 
 export interface FolderType {
-  _id: number;
+  _id: string;
   name: string;
-  documentIds: number[];
+  // documentIds: number[];
   updatedAt: string;
   color: string;
   documents: Document[];
@@ -82,13 +82,13 @@ const FoldersPage: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [showAddDocModal, setShowAddDocModal] = useState<boolean>(false);
   const [selectedFolder, setSelectedFolder] = useState<FolderType | null>(null);
-  const [expandedFolder, setExpandedFolder] = useState<number | null>(null);
+  const [expandedFolder, setExpandedFolder] = useState<string | null>(null);
   const [newFolderName, setNewFolderName] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("blue");
   const [selectedDocs, setSelectedDocs] = useState<number[]>([]);
-  const [editingFolder, setEditingFolder] = useState<number | null>(null);
+  const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
-
+  const deleteOldFolder = useDeleteFolder()
   const colors: ColorOption[] = [
     { name: "blue", class: "bg-blue-500" },
     { name: "green", class: "bg-green-500" },
@@ -114,13 +114,12 @@ const FoldersPage: React.FC = () => {
     }
   };
 
-  const deleteFolder = (folderId: number): void => {
-    // if (confirm("Are you sure you want to delete this folder?")) {
-    //   setFolders(folders.filter(f => f.id !== folderId));
-    // }
+  const deleteFolder = (folderId: string): void => {
+    deleteOldFolder.mutate(folderId)
+    
   };
 
-  const toggleExpandFolder = (folderId: number): void => {
+  const toggleExpandFolder = (folderId: string): void => {
     setExpandedFolder(expandedFolder === folderId ? null : folderId);
   };
 

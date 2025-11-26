@@ -13,6 +13,10 @@ const getAllUserFolders = async () => {
     const res = await axios.get(`${API_URL}/folders/user`, { withCredentials: true });
     return res.data.folders;
 }
+const deleteFolder =  async (id:string)=>{
+    const res = await axios.delete(`${API_URL}/folders/delete/${id}`, { withCredentials: true });
+    return res.data;
+}
 
 export const useCreateFolder = () =>{
     const queryClient = useQueryClient();
@@ -40,5 +44,23 @@ export const useFetchUserFolders = () =>{
         refetchOnWindowFocus: true, 
         refetchOnReconnect: true,
         refetchOnMount: true,
+    })
+}
+
+export const useDeleteFolder = () =>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id:string)=> deleteFolder(id),
+        onSuccess: (data) => {
+            console.log(data)
+            queryClient.invalidateQueries({ queryKey: ['userFolders'] });
+                    toast.success(data.message || 'Folder created successfully!');
+                },
+                onError: (error: any) => {
+                    console.log(error?.response)
+                    const message =
+                        error?.response?.data?.message || 'Failed to create folder. Please try again.';
+                    toast.error(message);
+                },
     })
 }
