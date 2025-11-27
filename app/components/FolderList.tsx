@@ -3,19 +3,18 @@ import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
-import { useAddDocumentToFolder, useCreateFolder, useDeleteFolder, useFetchUserFolders } from '../hooks/useFolders';
+import { useAddDocumentToFolder, useCreateFolder, useDeleteFolder, useFetchUserFolders, useRemoveDocumentFromFolder } from '../hooks/useFolders';
 import { useDocumentStore } from '../store/documentStore';
 
 export interface Document {
-  id: number;
-  name: string;
+  _id: string;
+  fileName: string;
   wordCount: number;
 }
 
 export interface FolderType {
   _id: string;
   name: string;
-  // documentIds: number[];
   updatedAt: string;
   color: string;
   documents: Document[];
@@ -27,10 +26,6 @@ interface ColorOption {
 }
 
 const FoldersPage: React.FC = () => {
-  
-
- 
-
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [showAddDocModal, setShowAddDocModal] = useState<boolean>(false);
@@ -45,6 +40,7 @@ const FoldersPage: React.FC = () => {
   const addDocuments  = useAddDocumentToFolder()
   const {documents } = useDocumentStore();
   console.log(documents)
+  const removeDocuments =useRemoveDocumentFromFolder()
   const colors: ColorOption[] = [
     { name: "blue", class: "bg-blue-500" },
     { name: "green", class: "bg-green-500" },
@@ -99,17 +95,10 @@ const FoldersPage: React.FC = () => {
    addDocuments.mutate({ folderId: selectedFolder?._id || '', documentIds: selectedDocs})
   };
 
-  // const removeDocFromFolder = (folderId: number, docId: number): void => {
-  //   setFolders(folders.map(folder =>
-  //     folder.id === folderId
-  //       ? {
-  //           ...folder,
-  //           documents: folder.documents.filter(doc => doc.id !== docId),
-  //           documentCount: folder.documentIds.length - 1
-  //         }
-  //       : folder``
-  //   ));
-  // };
+  const removeDocFromFolder = (folderId: string, docId: string): void => {
+    console.log(docId, folderId)
+    removeDocuments.mutate({ folderId, documentId: docId });
+  };
 
   const { data: userFolders = [] } = useFetchUserFolders();
   const filteredFolders = userFolders?.filter(folder =>
@@ -221,15 +210,15 @@ const FoldersPage: React.FC = () => {
                     {folder.documents.length > 0 ? (
                       folder.documents.map((doc) => (
                         <div
-                          key={doc.id}
+                          key={doc._id}
                           className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             <FileText className="w-4 h-4 text-slate-400 shrink-0" />
-                            <span className="text-sm text-slate-700 truncate">{doc.name}</span>
+                            <span className="text-sm text-slate-700 truncate">{doc.fileName} </span>
                           </div>
                           <button
-                            // onClick={() => removeDocFromFolder(folder.id, doc.id)}
+                            onClick={() => removeDocFromFolder(folder._id, doc._id)}
                             className="text-red-500 hover:text-red-600 ml-2"
                           >
                             <X className="w-4 h-4" />

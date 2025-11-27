@@ -1,5 +1,3 @@
-import React from 'react'
-import { Document } from '../../FolderList';
 import { Check, FileText } from 'lucide-react';
 import { UploadedDocument } from '@/app/types/document';
 

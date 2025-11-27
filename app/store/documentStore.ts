@@ -15,14 +15,11 @@ export const useDocumentStore = create<DocumentStore>()(
         {
             name: "document-storage",
             storage: createJSONStorage(() =>
-                (typeof window !== 'undefined' ? localStorage : undefined) as Storage
+                typeof window !== 'undefined' ? localStorage : (undefined as unknown as Storage)
             ),
             partialize: (state) => ({
-                documents: state.documents.map((d) => {
-                    const { textExtracted, ...rest } = d;
-                    return rest; // store everything except textExtracted
-                })
-            })
+                documents: state.documents.map(({ textExtracted, ...rest }) => rest),
+            }),
         }
     )
 )
