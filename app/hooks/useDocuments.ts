@@ -56,8 +56,8 @@ export const useDeleteDocument = (id?: string) => {
             toast.success(data.message || 'Document deleted successfully');
             queryClient.invalidateQueries({ queryKey: ['document', id] });
             queryClient.refetchQueries({ queryKey: ['totalUploads'], exact: true });
-            queryClient.invalidateQueries({ queryKey: ['documents'] });
-            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.refetchQueries({ queryKey: ['documents'] });
+            queryClient.refetchQueries({ queryKey: ['user'] });
             
         },
         onError: (error: any) => {
