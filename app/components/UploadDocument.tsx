@@ -18,7 +18,7 @@ const UploadDocument = () => {
             toast.error("No file found")
             return;
         }
-        if (file.size > 10 * 1024 * 1024) {
+        if (file.size > 20 * 1024 * 1024) {
             toast.error("File too large (max 10MB)");
             return;
         }
@@ -42,7 +42,8 @@ const UploadDocument = () => {
             toast.success("uploaded successfully")
             console.log(res.data)
             const id = res.data.uploadId
-            queryClient.invalidateQueries({ queryKey: ['documents'] })
+            queryClient.refetchQueries({ queryKey: ['documents'], exact: true });
+            queryClient.refetchQueries({ queryKey: ['totalUploads'], exact: true });
             router.push(`/documents/${id}`)
         } catch (error) {
             const err = error as AxiosError<{ message: string }>

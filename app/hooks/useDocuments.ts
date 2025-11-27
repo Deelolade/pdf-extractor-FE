@@ -55,6 +55,7 @@ export const useDeleteDocument = (id?: string) => {
         onSuccess: (data) => {
             toast.success(data.message || 'Document deleted successfully');
             queryClient.invalidateQueries({ queryKey: ['document', id] });
+            queryClient.refetchQueries({ queryKey: ['totalUploads'], exact: true });
             queryClient.invalidateQueries({ queryKey: ['documents'] });
             queryClient.invalidateQueries({ queryKey: ['user'] });
             
@@ -101,10 +102,9 @@ export const useUpdateDocumentName = ()=>{
          onSuccess:async (data, id) => {
             console.log(data)
             toast.success(data.message || 'Document name updated successfully!');
-            queryClient.invalidateQueries({ queryKey: ['document', id], refetchType: 'active'});
-            queryClient.invalidateQueries({ queryKey: ['documents',] });
+            queryClient.refetchQueries({ queryKey: ['document', id], exact: true });
+            queryClient.refetchQueries({ queryKey: ['documents',], exact: true });
             queryClient.invalidateQueries({ queryKey: ['user'] });
-            await queryClient.refetchQueries({ queryKey: ['document', id] , exact: true });
 
         },
         onError: (error: any) => {
