@@ -3,13 +3,10 @@ import React from 'react'
 interface CreateFolderModalProps {
     newFolderName: string;
     setNewFolderName: (name: string) => void;
-    colors: { name: string; class: string }[];
     setShowCreateModal: (value: boolean) => void;
-    setSelectedColor: (name: string) => void;
-    selectedColor: string;
     createFolder: () => void;
 }
-const CreateFolderModal = ({ newFolderName, setNewFolderName, colors, setShowCreateModal, setSelectedColor, selectedColor, createFolder }: CreateFolderModalProps) => {
+const CreateFolderModal = ({ newFolderName, setNewFolderName, setShowCreateModal, createFolder }: CreateFolderModalProps) => {
     return (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
@@ -26,21 +23,6 @@ const CreateFolderModal = ({ newFolderName, setNewFolderName, colors, setShowCre
                         autoFocus
                     />
                 </div>
-
-                <div className="mb-6">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Choose Color</label>
-                    <div className="flex gap-2">
-                        {colors.map((color) => (
-                            <button
-                                key={color.name}
-                                onClick={() => setSelectedColor(color.name)}
-                                className={`w-10 h-10 rounded-lg ${color.class} ${selectedColor === color.name ? 'ring-2 ring-offset-2 ring-slate-800' : ''
-                                    }`}
-                            />
-                        ))}
-                    </div>
-                </div>
-
                 <div className="flex gap-3">
                     <button
                         onClick={() => setShowCreateModal(false)}

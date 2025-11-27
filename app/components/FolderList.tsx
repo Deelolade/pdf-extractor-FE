@@ -5,6 +5,7 @@ import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
 import { useAddDocumentToFolder, useCreateFolder, useDeleteFolder, useFetchUserFolders, useRemoveDocumentFromFolder } from '../hooks/useFolders';
 import { useDocumentStore } from '../store/documentStore';
+import Loading from './ui/Loading';
 
 export interface Document {
   _id: string;
@@ -32,23 +33,13 @@ const FoldersPage: React.FC = () => {
   const [selectedFolder, setSelectedFolder] = useState<FolderType | null>(null);
   const [expandedFolder, setExpandedFolder] = useState<string | null>(null);
   const [newFolderName, setNewFolderName] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState<string>("blue");
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
   const deleteOldFolder = useDeleteFolder()
   const addDocuments  = useAddDocumentToFolder()
   const {documents } = useDocumentStore();
-  console.log(documents)
-  const removeDocuments =useRemoveDocumentFromFolder()
-  const colors: ColorOption[] = [
-    { name: "blue", class: "bg-blue-500" },
-    { name: "green", class: "bg-green-500" },
-    { name: "purple", class: "bg-purple-500" },
-    { name: "orange", class: "bg-orange-500" },
-    { name: "pink", class: "bg-pink-500" },
-    { name: "red", class: "bg-red-500" }
-  ];
+  const removeDocuments =useRemoveDocumentFromFolder();
 
   //  const [availableDocuments] = documents;
   const createFolder = (): void => {
@@ -100,15 +91,15 @@ const FoldersPage: React.FC = () => {
     removeDocuments.mutate({ folderId, documentId: docId });
   };
 
-  const { data: userFolders = [] } = useFetchUserFolders();
+  const { data: userFolders = [], isLoading } = useFetchUserFolders();
   const filteredFolders = userFolders?.filter(folder =>
     folder.name.toLowerCase().includes(searchQuery.toLowerCase())
   )  ?? [];
   
-  console.log(filteredFolders)
 
   return (
     <div className="flex-1 min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-8">
+      {isLoading && <Loading/>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -255,12 +246,9 @@ const FoldersPage: React.FC = () => {
       {/* Create Folder Modal */}
       {showCreateModal && (
         <CreateFolderModal 
-        colors={colors}
         newFolderName={newFolderName}
-        selectedColor={selectedColor}
          setNewFolderName={setNewFolderName}
          setShowCreateModal={setShowCreateModal}
-         setSelectedColor={setSelectedColor}
          createFolder={createFolder}
          />
       )}

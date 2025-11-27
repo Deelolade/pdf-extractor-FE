@@ -58,7 +58,10 @@ const AddDocumentModal = ({selectedFolder,availableDocuments, toggleDocSelection
                 Cancel
               </button>
               <button
-                onClick={addDocumentsToFolder}
+                onClick={()=> {
+                  addDocumentsToFolder
+                  setShowAddDocModal(false)
+                } }
                 disabled={selectedDocs.length === 0}
                 className="flex-1 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 font-medium transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
               >
