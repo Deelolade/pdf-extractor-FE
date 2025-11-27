@@ -5,12 +5,17 @@ import { UploadedDocument } from '../types/document';
 type DocumentStore = {
     documents: UploadedDocument[];
     setDocuments: (documents: UploadedDocument[]) => void;
+    currentDocument: UploadedDocument | null;
+    setCurrentDocument: (document: UploadedDocument | null) => void;
 }
 export const useDocumentStore = create<DocumentStore>()(
     persist(
         (set) => ({
             documents: [],
-            setDocuments: (documents: UploadedDocument[]) => set({ documents })
+            setDocuments: (documents: UploadedDocument[]) => set({ documents }),
+            
+            currentDocument: null,
+            setCurrentDocument: (doc) => set({ currentDocument: doc }),
         }),
         {
             name: "document-storage",

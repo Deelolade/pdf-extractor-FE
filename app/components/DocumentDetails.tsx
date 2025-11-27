@@ -13,6 +13,7 @@ import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 import { useDeleteDocument, useDocumentById, useSummarizeDocument, useUpdateDocumentName } from '@/app/hooks/useDocuments';
 import ChangeFileName from './ui/modals/ChangeFileName';
 import DeleteModal from './ui/modals/DeleteModalOpen';
+import { useDocumentStore } from '../store/documentStore';
 
 const DocumentDetails = () => {
     const { user } = useUser();
@@ -27,8 +28,13 @@ const DocumentDetails = () => {
     const deleteDocument = useDeleteDocument();
     const summarizeDocument = useSummarizeDocument();
     const updateDocument = useUpdateDocumentName()
-    const openChatWithAI = (docId: string) => {
+    const {setCurrentDocument} = useDocumentStore()
+
+
+    const openChatWithAI = (document: UploadedDocument) => {
+        const docId = document._id;
         router.push(`/chats/${docId}`)
+        setCurrentDocument(document)
     }
     const handleDeleteButton = async (id: string) => {
         setSelectedDocumentId(id);
@@ -119,13 +125,13 @@ const DocumentDetails = () => {
                                 )}
                             </div>
                             <div className=" flex flex-col  items-end   space-y-1">
-                                <p className="font-semibold text-sm text-left break-words">
+                                <p className="font-semibold text-sm text-left wrap-break-word">
                                     Created at:{" "}
                                     {document?.createdAt
                                         ? new Date(document.createdAt).toLocaleString()
                                         : "—"}
                                 </p>
-                                <p className="font-semibold text-sm text-left break-words">
+                                <p className="font-semibold text-sm text-left wrap-break-word">
                                     Last Modified:{" "}
                                     {document?.updatedAt
                                         ? new Date(document.updatedAt).toLocaleString()
@@ -159,7 +165,7 @@ const DocumentDetails = () => {
                         </div>
                         <div className="flex flex-wrap gap-3 justify-end mt-6">
                             <button
-                                onClick={() => openChatWithAI(document?._id || "")}
+                                onClick={() => openChatWithAI(document!)}
                                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-purple-600 hover:bg-purple-700 text-white"
                             >
                                 <FiMessageSquare className="w-4 h-4" />

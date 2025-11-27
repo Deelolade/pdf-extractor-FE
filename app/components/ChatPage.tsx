@@ -8,6 +8,7 @@ import { useChats } from "../hooks/useChat";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation"
+import { useDocumentStore } from "../store/documentStore";
 
 type Message = {
   role: "user" | "assistant";
@@ -23,7 +24,8 @@ export default function ChatPage() {
   const { data: savedMessages = [], isLoading, isError } = useChats(id)
   const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
-
+  const  {currentDocument}= useDocumentStore()
+  console.log(currentDocument)
   // Local optimistic messages (only unsaved ones)
   // const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
   const [isSending, setIsSending] = useState(false);
@@ -63,6 +65,7 @@ export default function ChatPage() {
     <section className="flex-1 max-h-screen h-screen">
       <div className="bg-white/10 h-18 absolute w-[80%] shadow-2xl backdrop-blur-xl p-5 flex items-center">
         <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => returnToDocument(id)}><FaArrowLeft className="scale-125" /></button>
+        <h1 className="text-lg font-semibold ml-4">{currentDocument?.fileName}</h1>
       </div>
       <div className="flex flex-col max-w-5xl mx-auto justify-center h-full pt-18">
         {/* Chat window */}
