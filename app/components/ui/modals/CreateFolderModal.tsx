@@ -31,7 +31,10 @@ const CreateFolderModal = ({ newFolderName, setNewFolderName, setShowCreateModal
                         Cancel
                     </button>
                     <button
-                        onClick={createFolder}
+                        onClick={()=>{
+                            createFolder()
+                            setShowCreateModal(false)
+                            }}
                         disabled={!newFolderName.trim()}
                         className="flex-1 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 font-medium transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
                     >

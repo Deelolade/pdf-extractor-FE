@@ -59,7 +59,7 @@ const AddDocumentModal = ({selectedFolder,availableDocuments, toggleDocSelection
               </button>
               <button
                 onClick={()=> {
-                  addDocumentsToFolder
+                  addDocumentsToFolder()
                   setShowAddDocModal(false)
                 } }
                 disabled={selectedDocs.length === 0}
