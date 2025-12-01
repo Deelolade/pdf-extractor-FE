@@ -12,9 +12,9 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
-import { useUser } from '@/app/store/userStore';
+import { useUserStore } from '@/app/store/userStore';
 const page = () => {
-    const { setUser} = useUser();
+    const { setUser} = useUserStore();
     const [loading, setLoading] = useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false)
     const router = useRouter();

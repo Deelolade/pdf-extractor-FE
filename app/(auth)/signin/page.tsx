@@ -71,9 +71,10 @@ const page = () => {
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading /> : "Sign In"}</button>
+                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed'>{loading ? <ButtonLoading /> : "Sign In"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold'>New here? <Link href="/signup" className='hover:underline'>Sign Up</Link></p>
+                                        <p className=' text-center text-sm font-light text-gray-700'>Forgot Password? <Link href="/forgot-password" className='hover:underline'>Click here</Link></p>
                                     </div>
                                 </div>
                             </div>

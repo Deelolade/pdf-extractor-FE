@@ -9,7 +9,6 @@ import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { PiSquaresFourBold } from 'react-icons/pi'
 import { useEffect, useRef, useState } from 'react'
 import { useUserStore } from '../store/userStore'
-// import { useUser } from '@/app/store/userStore'
 
 const DashboardSidebar = () => {
     const { data: user, isLoading } = useUser();
