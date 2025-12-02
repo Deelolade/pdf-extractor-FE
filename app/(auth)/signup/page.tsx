@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpFormType, signUpSchema } from '@/app/schemas/authSchema';
-import axios, { AxiosError } from 'axios';
-import { API_URL } from '@/app/config/env';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
@@ -66,7 +63,7 @@ const page = () => {
                                     {errors.confirmPassword && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.confirmPassword.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading/> : "Sign Up"}</button>
+                                    <button disabled={signUpUser.isPending} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{signUpUser.isPending ? <ButtonLoading/> : "Sign Up"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold  '>Already joined us? <Link href="/signin" className='hover:underline'>Sign in here</Link></p>
                                     </div>
