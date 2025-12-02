@@ -13,34 +13,18 @@ import { useState } from 'react';
 import { LuEye, LuEyeOff } from 'react-icons/lu';
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
 import { useUserStore } from '@/app/store/userStore';
+import { useSignUpUser } from '@/app/hooks/useUser';
 const page = () => {
     const { setUser} = useUserStore();
     const [loading, setLoading] = useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false)
     const router = useRouter();
-
+    const  signUpUser = useSignUpUser()
     const { register, handleSubmit, formState: { errors } } = useForm<signUpFormType>({
         resolver: zodResolver(signUpSchema),
     })
     const onSubmit = async (data: signUpFormType) => {
-            setLoading(true)
-        try {
-            const res = await axios.post(`${API_URL}/auth/register`, data,
-                {
-                    withCredentials: true  // ✅ important for cookies
-                }
-            );
-            toast.success(res.data.message || "User created successfully");
-            setUser(res.data.user)
-            router.push('/dashboard')
-        }
-        catch (error) {
-            const err = error as AxiosError<{ message: string }>
-            toast.error(err?.response?.data.message || "Somthing went wrong")
-        } 
-        finally{
-            setLoading(false)
-        }
+        signUpUser.mutate(data)
     }
     return (
         <>

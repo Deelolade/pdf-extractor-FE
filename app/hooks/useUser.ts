@@ -4,22 +4,34 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../store/userStore";
+import { signInFormType, signUpFormType } from "../schemas/authSchema";
 
-export const fetchUser = async () => {
+const fetchUser = async () => {
   const res = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
   return res.data.user;
 }
 
-const signInuser = async({email, password }:{email: string, password:string})=>{
-  const res = await axios.post(`${API_URL}/auth/signin`,{email, password}, { withCredentials: true });
+const signUpuser = async(data:signUpFormType)=>{
+  const res = await axios.post(`${API_URL}/auth/register`,{
+    name:data.name,
+    email:data.email, 
+    password:data.password, 
+  }, { withCredentials: true });
   return res.data.user;
 }
-export const logOutUser = async () => {
+const signInuser = async(data:signInFormType)=>{
+  const res = await axios.post(`${API_URL}/auth/signin`,{
+    email: data.email,
+    password: data.password
+  }, { withCredentials: true });
+  return res.data.user;
+}
+const logOutUser = async () => {
   const res = await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
   return res.data;
 }
 
-export const resetPassword = async ({ token, newPassword }: { token: string, newPassword: string }) => {
+const resetPassword = async ({ token, newPassword }: { token: string, newPassword: string }) => {
   const res = await axios.post(`${API_URL}/auth/reset-password/${token}`,{newPassword});
   return res.data;
 }
@@ -31,7 +43,23 @@ export const useUser = () => {
     refetchOnWindowFocus: false,
   });
 };
-  export const useSignInUser = () => {
+export const useSignUpUser = () => {
+    const router = useRouter();
+    const { setUser } = useUserStore();
+    return useMutation({
+      mutationFn: signUpuser,
+      onSuccess: (data) => {
+        console.log(data)
+        toast.success(data.message || "User created successfully");
+        setUser(data)
+        router.push('/dashboard');
+      }, onError: (error: any) => {
+        console.log(error?.response?.data?.message )
+        toast.error(error?.response?.data?.message  || "Somthing went wrong");
+      }
+    })
+  }
+export const useSignInUser = () => {
     const router = useRouter();
     const { setUser } = useUserStore();
     return useMutation({
