@@ -1,11 +1,8 @@
 "use client"
 
 import { useParams, useRouter } from 'next/navigation'
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UploadedDocument } from "@/app/types/document";
-import axios, { AxiosError } from 'axios';
-import { API_URL } from '@/app/config/env';
-import { useUser } from '../store/userStore';
+import { useUserStore } from '../store/userStore';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
@@ -16,12 +13,10 @@ import DeleteModal from './ui/modals/DeleteModalOpen';
 import { useDocumentStore } from '../store/documentStore';
 
 const DocumentDetails = () => {
-    const { user } = useUser();
+    const { user } = useUserStore();
     const { id } = useParams() as { id: string }
-    const [loading, setLoading] = useState(false)
     const router = useRouter()
     const [copied, setCopied] = useState(false);
-    const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
     const [changeFileNameModalOpen, setChangeFileNameModalOpen] = useState(false);
@@ -67,7 +62,7 @@ const DocumentDetails = () => {
     }, [isError])
     return (
         <section className='flex-1 min-h-screen py-6 px-8'>
-            {(isLoading || loading || summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading/>}
+            {(isLoading  || summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading/>}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
                     <div className="" onClick={()=> setChangeFileNameModalOpen(true)}>

@@ -13,38 +13,17 @@ import { useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useUserStore } from '@/app/store/userStore';
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
+import { useSignInUser } from '@/app/hooks/useUser';
 
 const page = () => {
-    const { setUser } = useUserStore();
-    const router = useRouter();
-    const [loading, setLoading] = useState<boolean>(false)
+    const signInUser = useSignInUser()
     const [passwordType, setPasswordType] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
 
     const onSubmit = async (data: signInFormType) => {
-        setLoading(true)
-        try {
-            const res = await axios.post(`${API_URL}/auth/signin`, data,
-                {
-                    withCredentials: true 
-                }
-            );
-            router.push('/dashboard')
-            toast.success(res.data.message || "Signed in successfully");
-            console.log(res.data.user)
-            setUser(res.data.user)
-            setLoading(false)
-        }
-        catch (error) {
-            const err = error as AxiosError<{ message: string }>
-            console.log('error:', error);
-            toast.error(err?.response?.data.message || "Something went wrong");
-        }
-        finally {
-            setLoading(false)
-        }
+        signInUser.mutate({email: data.email, password: data.password});
     }
     return (
         <>
@@ -71,7 +50,7 @@ const page = () => {
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed'>{loading ? <ButtonLoading /> : "Sign In"}</button>
+                                    <button disabled={signInUser.isPending} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed'>{signInUser.isPending ? <ButtonLoading /> : "Sign In"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold'>New here? <Link href="/signup" className='hover:underline'>Sign Up</Link></p>
                                         <p className=' text-center text-sm font-light text-gray-700'>Forgot Password? <Link href="/forgot-password" className='hover:underline'>Click here</Link></p>

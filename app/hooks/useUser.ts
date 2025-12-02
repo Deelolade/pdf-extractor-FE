@@ -3,12 +3,17 @@ import { API_URL } from "../config/env";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "../store/userStore";
 
 export const fetchUser = async () => {
   const res = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
   return res.data.user;
 }
 
+const signInuser = async({email, password }:{email: string, password:string})=>{
+  const res = await axios.post(`${API_URL}/auth/signin`,{email, password}, { withCredentials: true });
+  return res.data.user;
+}
 export const logOutUser = async () => {
   const res = await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
   return res.data;
@@ -26,6 +31,20 @@ export const useUser = () => {
     refetchOnWindowFocus: false,
   });
 };
+export const useSignInUser = () => {
+  const router = useRouter();
+  const { setUser } = useUserStore();
+  return useMutation({
+    mutationFn: signInuser,
+    onSuccess: (data) => {
+      toast.success("Signed in successfully");
+      setUser(data.user)
+      router.push('/dashboard');
+    }, onError: () => {
+      toast.error("Failed to sign in");
+    }
+  })
+}
 export const useLogOutUser = () => {
   return useMutation({
     mutationFn: logOutUser,

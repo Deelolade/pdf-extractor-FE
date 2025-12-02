@@ -20,7 +20,6 @@ const page = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get('token'); // Get reset token from URL
-    const [loading, setLoading] = useState(false);
     const [passwordType, setPasswordType] = useState(false);
     const [confirmPasswordType, setConfirmPasswordType] = useState(false);
     const resetPassword = useResetPassword(token || '');
@@ -100,10 +99,10 @@ const page = () => {
 
                             <button
                                 type='submit'
-                                disabled={loading}
+                                disabled={resetPassword.isPending}
                                 className='w-full bg-black hover:bg-gray-600 text-white py-2 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
                             >
-                                {loading ? <ButtonLoading /> : "Reset Password"}
+                                {resetPassword.isPending ? <ButtonLoading /> : "Reset Password"}
                             </button>
                         </form>
 
