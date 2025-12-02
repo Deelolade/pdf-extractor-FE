@@ -31,25 +31,28 @@ export const useUser = () => {
     refetchOnWindowFocus: false,
   });
 };
-export const useSignInUser = () => {
-  const router = useRouter();
-  const { setUser } = useUserStore();
-  return useMutation({
-    mutationFn: signInuser,
-    onSuccess: (data) => {
-      toast.success("Signed in successfully");
-      setUser(data.user)
-      router.push('/dashboard');
-    }, onError: () => {
-      toast.error("Failed to sign in");
-    }
-  })
-}
+  export const useSignInUser = () => {
+    const router = useRouter();
+    const { setUser } = useUserStore();
+    return useMutation({
+      mutationFn: signInuser,
+      onSuccess: (data) => {
+        console.log(data)
+        toast.success(data.message || "Signed in successfully");
+        setUser(data)
+        router.push('/dashboard');
+      }, onError: (error: any) => {
+        console.log(error?.response?.data?.message )
+        toast.error(error?.response?.data?.message  || "Failed to sign in");
+      }
+    })
+  }
 export const useLogOutUser = () => {
+  const router = useRouter();
   return useMutation({
     mutationFn: logOutUser,
     onSuccess: () => {
-      window.location.href = '/signin';
+      router.push('/signin');
       toast.success("Logged out successfully");
     }, onError: () => {
       toast.error("Failed to log out");

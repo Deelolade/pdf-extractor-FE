@@ -7,6 +7,7 @@ type DocumentStore = {
     setDocuments: (documents: UploadedDocument[]) => void;
     currentDocument: UploadedDocument | null;
     setCurrentDocument: (document: UploadedDocument | null) => void;
+    clearStore: () => void;
 }
 export const useDocumentStore = create<DocumentStore>()(
     persist(
@@ -16,6 +17,8 @@ export const useDocumentStore = create<DocumentStore>()(
             
             currentDocument: null,
             setCurrentDocument: (doc) => set({ currentDocument: doc }),
+
+            clearStore:()=> set({documents:[], currentDocument:null})
         }),
         {
             name: "document-storage",

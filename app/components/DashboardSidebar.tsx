@@ -9,6 +9,7 @@ import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { PiSquaresFourBold } from 'react-icons/pi'
 import { useEffect, useRef, useState } from 'react'
 import { useUserStore } from '../store/userStore'
+import { useDocumentStore } from '../store/documentStore'
 
 const DashboardSidebar = () => {
     const { data: user, isLoading } = useUser();
@@ -17,6 +18,7 @@ const DashboardSidebar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const logOutUser = useLogOutUser();
     const logOut = useUserStore(state => state.logOut);
+    const clearStore = useDocumentStore(state=> state.clearStore);
 
     // Base styling for all links
     const linkBaseClasses = "w-full p-3 rounded-lg my-2 flex items-center text-white font-medium transition duration-150 ease-in-out";
@@ -46,6 +48,7 @@ const DashboardSidebar = () => {
     const handleLogOut = () => {
         logOutUser.mutate();
         logOut();
+        clearStore()
     }
     return (
         <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col justify-between text-[#EFF6FF]'>
