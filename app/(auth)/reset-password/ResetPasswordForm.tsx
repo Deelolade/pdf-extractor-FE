@@ -5,8 +5,6 @@ import signUpImage from "@/public/images/signUpImage.jpg"
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import axios, { AxiosError } from 'axios';
-import { API_URL } from '@/app/config/env';
 import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {  useState } from 'react';
