@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, ReactNode } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
