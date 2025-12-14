@@ -11,12 +11,12 @@ import { useEffect, useRef, useState } from 'react'
 import { useUserStore } from '../store/userStore'
 import { useDocumentStore } from '../store/documentStore'
 import { IconType } from "react-icons"
+import { NavLinks } from './DashboardMain'
 
-type NavLinks = {
-    label: string,
-    link: string,
-    icon: IconType
-}
+const linkBaseClasses = "lg:w-full p-2 lg:p-3  rounded-lg my-2 flex justify-center lg:justify-start gap-4 items-center text-white font-medium transition duration-150 ease-in-out ";
+const activeClass = "bg-gray-700";
+const inactiveClass = "hover:bg-gray-800";
+export const getLinkClasses = (pathName: string, href: string) => `${linkBaseClasses} ${pathName === href ? activeClass : inactiveClass}`;
 const DashboardSidebar = () => {
     const { data: user, isLoading } = useUser();
     const currentUser = { ...user };
@@ -25,14 +25,6 @@ const DashboardSidebar = () => {
     const logOutUser = useLogOutUser();
     const logOut = useUserStore(state => state.logOut);
     const clearStore = useDocumentStore(state => state.clearStore);
-
-    // Base styling for all links
-    const linkBaseClasses = "lg:w-full p-2 lg:p-3  rounded-lg my-2 flex justify-center items-center text-white font-medium transition duration-150 ease-in-out ";
-    const activeClass = "bg-gray-700";
-    const inactiveClass = "hover:bg-gray-800";
-
-    const getLinkClasses = (href: string) => `${linkBaseClasses} ${pathName === href ? activeClass : inactiveClass}`;
-
     const menuRef = useRef<HTMLDivElement | null>(null);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -57,23 +49,23 @@ const DashboardSidebar = () => {
         clearStore()
     }
     const navigationLinks: NavLinks[] = [
-        { 
+        {
             label: "Dashboard",
             link: 'dashboard',
             icon: PiSquaresFourBold
         },
-        { 
+        {
             label: "Uploads",
             link: 'uploads',
             icon: FaRegCaretSquareUp
         },
-        { 
+        {
             label: "Folders",
             link: 'folders',
             icon: FiFolder
         }
     ]
-     
+
     return (
         <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
             {isLoading && <Loading />}
@@ -85,20 +77,20 @@ const DashboardSidebar = () => {
                 </div>
                 <ul className='mt-12 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
                     {
-                        navigationLinks && navigationLinks.map((navlinks, idx)=>{
-                             const Icon = navlinks.icon
-                            return(
-                                <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(`/${navlinks.link}`)} group relative`}>
-                        <Icon className="h-6 w-6 md:size-8  " />
-                        <span className="hidden lg:inline">{navlinks.label}</span>
-                        <span className="pointer-events-none
+                        navigationLinks && navigationLinks.map((navlinks, idx) => {
+                            const Icon = navlinks.icon
+                            return (
+                                <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(pathName, `/${navlinks.link}`)} group relative`}>
+                                    <Icon className="h-6 w-6 md:size-8  " />
+                                    <span className="hidden lg:inline">{navlinks.label}</span>
+                                    <span className="pointer-events-none
       absolute left-full top-1/2 -translate-y-1/2 ml-3
       whitespace-nowrap
       rounded-md bg-slate-900 px-3 py-1 text-sm text-white
       opacity-0 scale-95
       transition-all duration-200 
       group-hover:opacity-100 group-hover:scale-100">{navlinks.label}</span>
-                    </Link>
+                                </Link>
                             )
                         })
                     }
