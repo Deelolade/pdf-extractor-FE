@@ -11,6 +11,19 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@media (max-width: 768px) {
+  html, body {
+    position: static !important;
+    overflow: auto !important;
+    height: auto !important;
+  }
+
+  * {
+    backdrop-filter: none !important;
+  }
+}
+
 @keyframes bounce-dots {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
