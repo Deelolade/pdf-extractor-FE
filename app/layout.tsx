@@ -9,6 +9,7 @@ import { QueryProvider } from "./providers/QueryProvider";
 export const metadata: Metadata = {
   title: "DocFeel",
   description: "Upload any document and let AI do the heavy lifting",
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 export default function RootLayout({
