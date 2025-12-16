@@ -6,13 +6,17 @@ import { Clock, Eye, FileText, } from "lucide-react"
 import UploadDocument from "./UploadDocument"
 import { useDocumentStore } from "../store/documentStore"
 import DashboardMobileNav from "./DashboardMobileNav"
+import { UploadedDocument } from "../types/document"
 
 const UploadedDocumentList = () => {
     const route = useRouter();
-    const { documents } = useDocumentStore()
+    const { documents, setCurrentDocument } = useDocumentStore()
 
-    const handleViewDocument = (id: string) => {
+    const handleViewDocument = (doc: UploadedDocument) => {
+        const id = doc._id
+        if (!id) return;
         route.push(`documents/${id}`);
+        setCurrentDocument(doc)
     };
     return (
         <>
@@ -68,7 +72,7 @@ const UploadedDocumentList = () => {
                                     </div>
 
                                     <button
-                                        onClick={() => handleViewDocument(doc._id)}
+                                        onClick={() => handleViewDocument(doc)}
                                         className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
                                     >
                                         <Eye className="w-4 h-4" />

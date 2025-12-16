@@ -9,11 +9,13 @@ import { getLinkClasses } from './DashboardSidebar'
 import { usePathname } from 'next/navigation'
 import { NavLinks } from './DashboardMain';
 import { Menu, X } from 'lucide-react';
+import { useUserStore } from '../store/userStore';
 
 
 const DashboardMobileNav = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
     const pathName = usePathname();
+    const {user} = useUserStore()
     const navigationLinks: NavLinks[] = [
         {
             label: "Dashboard",
@@ -47,15 +49,15 @@ const DashboardMobileNav = () => {
                     >
                         <div className="flex items-center justify-between h-14 px-4">
                             <span className="font-bold text-lg">DocFeel</span>
-
+                            <span>{user?.trialCount} / 5</span>
                         </div>
 
-                        <ul className='mt-12 px-2 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
+                        <ul className='mt-8 px-2 text-[#EFF6FF] gap-5 md:flex md:flex-col'>
                             {
                                 navigationLinks && navigationLinks.map((navlinks, idx) => {
                                     const Icon = navlinks.icon
                                     return (
-                                        <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(pathName, `/${navlinks.link}`)} w-full h-10 group relative flex justify-start items-center`}>
+                                        <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(pathName, `/${navlinks.link}`)} my-8 w-full h-10 group relative flex justify-start items-center`}>
                                             <Icon className="h-8 w-8  " />
                                             <span className="inline">{navlinks.label}</span>
                                             <span className="pointer-events-none

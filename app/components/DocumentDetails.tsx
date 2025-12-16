@@ -23,7 +23,7 @@ const DocumentDetails = () => {
     const deleteDocument = useDeleteDocument();
     const summarizeDocument = useSummarizeDocument();
     const updateDocument = useUpdateDocumentName()
-    const {setCurrentDocument} = useDocumentStore()
+    const { setCurrentDocument, currentDocument:document } = useDocumentStore()
 
 
     const openChatWithAI = (document: UploadedDocument) => {
@@ -49,20 +49,13 @@ const DocumentDetails = () => {
         toast.success("Summary copied to clipboard!");
         setTimeout(() => setCopied(false), 2000);
     };
-    const { data: document, isLoading, isError } = useDocumentById(id)
 
    const handleChangeFileName =(newName: string)=>{
     updateDocument.mutate({ id: document?._id ?? ' ', fileName: newName})
    }
-
-    useEffect(() => {
-        if (isError) {
-            toast.error("Error occurred while fetching document");
-        }
-    }, [isError])
     return (
         <section className='flex-1 min-h-screen py-6 px-8'>
-            {(isLoading  || summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading/>}
+            {(summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading/>}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
                     <div className="" onClick={()=> setChangeFileNameModalOpen(true)}>

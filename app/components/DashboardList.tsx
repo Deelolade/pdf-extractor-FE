@@ -7,9 +7,10 @@ import { useDocuments } from "@/app/hooks/useDocuments"
 import { Clock, Eye, FileText, } from "lucide-react"
 import { useDocumentStore } from "../store/documentStore"
 import { useEffect } from "react"
+import { UploadedDocument } from "../types/document"
 const DashboardList = () => {
   const route = useRouter();
-  const { setDocuments } = useDocumentStore();
+  const { setDocuments, setCurrentDocument } = useDocumentStore();
 
   const { data: documents, isLoading, } = useDocuments();
 
@@ -18,7 +19,10 @@ const DashboardList = () => {
       setDocuments(documents); // persist fetched documents
     }
   }, [documents, setDocuments]);
-  const handleViewDocument = (id: string) => {
+  const handleViewDocument = (doc:UploadedDocument) => {
+    const id = doc._id
+    if (!id) return; 
+    setCurrentDocument(doc)
     route.push(`documents/${id}`);
   };
   return (
@@ -72,7 +76,7 @@ const DashboardList = () => {
                   </div>
 
                   <button
-                    onClick={() => handleViewDocument(doc._id)}
+                    onClick={() => handleViewDocument(doc)}
                     className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
                   >
                     <Eye className="w-4 h-4" />
