@@ -1,5 +1,5 @@
 // "use client"
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +9,10 @@ import { QueryProvider } from "./providers/QueryProvider";
 export const metadata: Metadata = {
   title: "DocFeel",
   description: "Upload any document and let AI do the heavy lifting",
-  viewport: 'width=device-width, initial-scale=1',
+};
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

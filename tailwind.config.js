@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+       screens: {
+        xxs: "375px",
+      },
       colors: {
         // Base colors
         background: "#FFFFFF",

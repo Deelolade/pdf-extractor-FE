@@ -27,6 +27,7 @@ export const useDocumentStore = create<DocumentStore>()(
             ),
             partialize: (state) => ({
                 documents: state.documents.map(({ textExtracted, ...rest }) => rest),
+                currentDocument: state.currentDocument
             }),
         }
     )
