@@ -57,16 +57,23 @@ const DocumentDetails = () => {
     return (
         <>
             <section className='flex-1 min-h-screen py-6 px-4 lg:px-8'>
-            <header className="flex justify-between my-3">
-                <h1 className="text-lg lg:text-2xl font-bold">Document Details</h1>
-                <DashboardMobileNav />
-            </header>
+                <header className="flex justify-between my-3">
+                    <h1 className="text-lg lg:text-2xl font-bold">Document Details</h1>
+                    <DashboardMobileNav />
+                </header>
                 {(summarizeDocument.isPending || updateDocument.isPending || updateDocument.isPending || deleteDocument.isPending) && <Loading />}
                 <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 lg:p-8 space-y-8">
                     <div className="flex flex-col sm:flex-row items-start  sm:items-center justify-between">
-                        <div className="flex flex-col mx-auto sm:mx-0 items-center sm:items-start" onClick={() => setChangeFileNameModalOpen(true)}>
+                        <div className="flex flex-col mx-auto sm:mx-0 items-center sm:items-start group relative" onClick={() => setChangeFileNameModalOpen(true)}>
                             <h2 className='text-2xl font-bold text-slate-800 mb-1 p-2 rounded-lg'>{document?.fileName}</h2>
                             <p className="text-sm text-slate-500">Uploaded by {user?.name || "You"}</p>
+                            <span className="pointer-events-none
+      absolute left-full top-1/2 -translate-y-1/2 ml-3
+      whitespace-nowrap
+      rounded-md bg-slate-900 px-3 py-1 text-sm text-white
+      opacity-0 scale-95
+      transition-all duration-200 
+      group-hover:opacity-100 group-hover:scale-100">Change title</span>
                         </div>
                         <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-end mt-6">
                             <button
