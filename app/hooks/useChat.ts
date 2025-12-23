@@ -10,7 +10,10 @@ const getPreviousChats = async (id: string) => {
 }
 const sendMessage = async (id: string, message: string): Promise<Message> => {
     const res = await axios.post(`${API_URL}/document/chat/${id}`, { message: message.trim() }, { withCredentials: true });
-    return res.data.message;
+    return {
+    role: 'assistant',
+    content: res.data.reply,   
+  };
 }
 export const useGetPreviousChats = (id?: string) => {
     return useQuery({

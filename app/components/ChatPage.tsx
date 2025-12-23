@@ -44,7 +44,7 @@ export default function ChatPage() {
   }
   return (
     <section className="flex-1 max-h-screen h-screen">
-      <div className="bg-white/10 h-18 fixed w-full shadow-sm backdrop-blur-xl p-5 flex items-center">
+      <div className="bg-white/10 h-18 fixed w-full shadow-sm  p-5 flex items-center">
         <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => returnToDocument(id)}><FaArrowLeft className="scale-125" /></button>
         <h1 className="text-lg font-semibold ml-4">{currentDocument?.fileName}</h1>
       </div>
@@ -54,7 +54,7 @@ export default function ChatPage() {
           {savedMessages.length > 0 ? (
             savedMessages.map((msg: Message, idx: string) => (
               <div
-                key={idx}
+                key={msg.role + idx}
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
                   }`}
               >
@@ -93,12 +93,13 @@ export default function ChatPage() {
               placeholder="Type your message… (Shift+Enter for new line)"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              disabled={sendChatMessage.isPending}
               onKeyDown={handleKeyDown}
             />
             <button
               onClick={sendMessage}
               disabled={sendChatMessage.isPending}
-              className="px-4 py-2 rounded-lg bg-slate-800 text-white disabled:bg-slate-5 00"
+              className="px-4 py-2 rounded-lg bg-slate-800 text-white disabled:bg-slate-500"
             >
               Send
             </button>
