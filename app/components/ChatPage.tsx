@@ -10,7 +10,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation"
 import { useDocumentStore } from "../store/documentStore";
 
-type Message = {
+export type Message = {
   role: "user" | "assistant";
   content: string;
 };
@@ -18,44 +18,23 @@ type Message = {
 export default function ChatPage() {
   const params = useParams()
   const id = params.id as string;
-  console.log(id)
   const route = useRouter()
   const [input, setInput] = useState("");
   const { data: savedMessages = [], isLoading, isError } = useGetPreviousChats(id)
-  const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const  {currentDocument}= useDocumentStore()
+  const { currentDocument } = useDocumentStore()
   const sendChatMessage = useSendMessage(id)
-  console.log(currentDocument)
-  // Local optimistic messages (only unsaved ones)
-  // const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
-  const [isSending, setIsSending] = useState(false);
-
-  // Combine saved + pending messages
-  // const allMessages = [...savedMessages, ...pendingMessages];
-  // Auto-scroll on new message
-
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [savedMessages]);
 
   const sendMessage = async () => {
-    if (!input.trim() || isSending) return;
+    if (!input.trim() || sendChatMessage.isPending) return;
 
     setInput("");
-    // setIsSending(true);
+    
     sendChatMessage.mutate(input)
 
-    // try {
-    //   const res = await axios.post(`${API_URL}/document/chat/${id}`, {
-    //     message: input.trim(),
-    //   }, { withCredentials: true });
-    //   queryClient.invalidateQueries({ queryKey: ['chat', id] })
-    // } catch (err) {
-    //   console.log(err)
-    // } finally {
-    //   setIsSending(false);
-    // }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>
@@ -65,7 +44,7 @@ export default function ChatPage() {
   }
   return (
     <section className="flex-1 max-h-screen h-screen">
-      <div className="bg-white/10 h-18 absolute w-full shadow-sm backdrop-blur-xl p-5 flex items-center">
+      <div className="bg-white/10 h-18 fixed w-full shadow-sm backdrop-blur-xl p-5 flex items-center">
         <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => returnToDocument(id)}><FaArrowLeft className="scale-125" /></button>
         <h1 className="text-lg font-semibold ml-4">{currentDocument?.fileName}</h1>
       </div>
@@ -73,30 +52,35 @@ export default function ChatPage() {
         {/* Chat window */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 ">
           {savedMessages.length > 0 ? (
-             savedMessages.map((msg:Message, idx:string) => (
-            <div
-              key={idx}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
-                }`}
-            >
+            savedMessages.map((msg: Message, idx: string) => (
               <div
-                className={`max-w-[75%] rounded-lg px-4 py-3 text-sm whitespace-pre-wrap ${msg.role === "user"
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-200 text-gray-900"
+                key={idx}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
                   }`}
               >
-                {msg.content}
+                <div
+                  className={`max-w-[75%] rounded-lg px-4 py-3 text-sm whitespace-pre-wrap ${msg.role === "user"
+                    ? "bg-gray-800 text-white"
+                    : "bg-gray-200 text-gray-900"
+                    }`}
+                >
+                  {msg.content}
+                </div>
               </div>
-            </div>
-          ))) : (
+            ))) : (
             <div className="text-center text-gray-500 py-12">
               <p className="text-lg">No messages yet</p>
               <p className="text-sm mt-2">Start the conversation by typing below!</p>
             </div>)}
 
           {sendChatMessage.isPending && (
-            <div className="text-gray-600 text-sm italic">AI is typing…</div>
+            <div className="flex justify-start">
+              <div className="bg-gray-200 px-4 py-2 rounded-lg text-sm italic">
+                AI is typing…
+              </div>
+            </div>
           )}
+
 
           <div ref={bottomRef} />
         </div>
