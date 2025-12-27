@@ -63,6 +63,11 @@ const DashboardSidebar = () => {
             label: "Folders",
             link: 'folders',
             icon: FiFolder
+        },
+        {
+            label: "Folders",
+            link: 'folders',
+            icon: FiFolder
         }
     ]
     const max_trials = currentUser.isPaidUser ? 50 : 5;

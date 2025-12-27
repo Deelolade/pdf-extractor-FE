@@ -8,8 +8,9 @@ export const useAuth = () => {
 
     useEffect(()=> {
         const token = Cookies.get('access_token');
-        if (!token) {
-            router.push('/signin');
-        }
+        console.log('Token:', token);
+        // if (!token) {
+        //     router.push('/signin');
+        // }
     }, [router]);
 }
